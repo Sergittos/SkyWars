@@ -1,0 +1,7 @@
+main: sergittos\skywars\SkyWars
+name: SkyWars
+api: 5.0.0
+version: 1.0.0
+author: Sergittos (@Sergittos)
+website: github.com/Sergittos
+description: 🏹 A SkyWars plugin for PocketMine-MP servers
