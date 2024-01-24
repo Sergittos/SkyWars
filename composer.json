@@ -3,7 +3,7 @@
   "description": "SkyWars for PocketMine-MP",
   "type": "project",
   "license": "LGPL-3.0",
-  "require": {
+  "require-dev": {
     "pocketmine/pocketmine-mp": "^5.10"
   },
   "autoload": {
