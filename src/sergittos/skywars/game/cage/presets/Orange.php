@@ -12,6 +12,16 @@ declare(strict_types=1);
 namespace sergittos\skywars\game\cage\presets;
 
 
-class Orange {
+use pocketmine\block\utils\DyeColor;
+use pocketmine\block\VanillaBlocks;
+use pocketmine\world\Position;
+
+class Orange extends DefaultCage {
+
+    public function build(Position $position): void {
+        foreach($this->getBlocks($position) as $block) {
+            $position->getWorld()->setBlock($block, VanillaBlocks::STAINED_GLASS()->setColor(DyeColor::ORANGE));
+        }
+    }
 
 }

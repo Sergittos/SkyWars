@@ -12,6 +12,15 @@ declare(strict_types=1);
 namespace sergittos\skywars\game\cage\presets;
 
 
-class Nicolas {
+use pocketmine\block\VanillaBlocks;
+use pocketmine\world\Position;
+
+class Nicolas extends DefaultCage {
+
+    public function build(Position $position): void {
+        foreach($this->getBlocks($position) as $block) {
+            $position->getWorld()->setBlock($block, VanillaBlocks::MONSTER_SPAWNER());
+        }
+    }
 
 }
