@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\entity;
+namespace sergittos\skywars\entity;
 
 
 class PlaySkywarsEntity {

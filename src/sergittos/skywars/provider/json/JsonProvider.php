@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\provider\json;
+namespace sergittos\skywars\provider\json;
 
 
 class JsonProvider {

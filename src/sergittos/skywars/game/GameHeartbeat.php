@@ -9,9 +9,18 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\game;
+namespace sergittos\skywars\game;
 
 
-class GameHeartbeat {
+use pocketmine\scheduler\Task;
+use sergittos\skywars\SkyWars;
+
+class GameHeartbeat extends Task {
+
+    public function onRun(): void {
+        foreach(SkyWars::getInstance()->getGameManager()->getGames() as $game) {
+            $game->getStage()->tick();
+        }
+    }
 
 }

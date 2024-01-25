@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\provider\sqlite;
+namespace sergittos\skywars\provider\sqlite;
 
 
 class SqliteProvider {

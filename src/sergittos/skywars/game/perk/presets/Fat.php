@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\game\perk\presets;
+namespace sergittos\skywars\game\perk\presets;
 
 
 class Fat {

@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\game\cage\presets;
+namespace sergittos\skywars\game\cage\presets;
 
 
 class Spring {

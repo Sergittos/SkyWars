@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\game\kit;
+namespace sergittos\skywars\game\kit;
 
 
 enum Rarity {

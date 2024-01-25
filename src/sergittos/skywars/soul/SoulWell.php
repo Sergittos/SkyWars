@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\soul;
+namespace sergittos\skywars\soul;
 
 
 class SoulWell {

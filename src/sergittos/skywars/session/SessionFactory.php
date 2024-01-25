@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\session;
+namespace sergittos\skywars\session;
 
 
 use pocketmine\player\Player;

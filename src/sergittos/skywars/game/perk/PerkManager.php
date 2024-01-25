@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\game\perk;
+namespace sergittos\skywars\game\perk;
 
 
 class PerkManager {

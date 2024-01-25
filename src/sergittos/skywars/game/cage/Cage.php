@@ -9,9 +9,17 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\game\cage;
+namespace sergittos\skywars\game\cage;
 
 
-class Cage {
+use pocketmine\world\Position;
+
+abstract class Cage {
+
+    public function __construct() {
+
+    }
+
+    abstract public function build(Position $position): void;
 
 }

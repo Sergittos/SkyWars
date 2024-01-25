@@ -9,9 +9,11 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\game\stage;
+namespace sergittos\skywars\game\stage;
 
 
-class EndingStage {
+class EndingStage extends Stage {
+
+    public function tick(): void {}
 
 }

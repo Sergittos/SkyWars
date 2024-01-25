@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\provider\mysql;
+namespace sergittos\skywars\provider\mysql;
 
 
 class MysqlProvider {

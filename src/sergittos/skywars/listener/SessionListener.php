@@ -9,18 +9,27 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\listener;
+namespace sergittos\skywars\listener;
 
 
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\event\player\PlayerQuitEvent;
-use sergittos\skywars\sergittos\skywars\session\SessionFactory;
+use sergittos\skywars\game\cage\presets\DefaultCage;
+use sergittos\skywars\session\SessionFactory;
 
 class SessionListener implements Listener {
 
     public function onLogin(PlayerLoginEvent $event): void {
         SessionFactory::createSession($event->getPlayer());
+    }
+
+    public function onChat(PlayerChatEvent $event): void {
+        $cage = new DefaultCage();
+        $cage->build($event->getPlayer()->getPosition());
+
+        $event->getPlayer()->sendMessage("§aCage created!");
     }
 
     /**

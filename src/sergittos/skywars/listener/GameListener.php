@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\listener;
+namespace sergittos\skywars\listener;
 
 
 class GameListener {

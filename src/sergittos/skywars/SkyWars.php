@@ -9,21 +9,39 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars;
+namespace sergittos\skywars;
 
 
 use pocketmine\event\Listener;
 use pocketmine\plugin\PluginBase;
-use sergittos\skywars\sergittos\skywars\listener\SessionListener;
+use pocketmine\utils\SingletonTrait;
+use sergittos\skywars\game\GameHeartbeat;
+use sergittos\skywars\game\GameManager;
+use sergittos\skywars\listener\SessionListener;
 
 class SkyWars extends PluginBase {
+    use SingletonTrait;
+
+    private GameManager $gameManager;
+
+    protected function onLoad(): void {
+        self::setInstance($this);
+    }
 
     protected function onEnable(): void {
+        $this->gameManager = new GameManager();
+
         $this->registerListener(new SessionListener());
+
+        $this->getScheduler()->scheduleRepeatingTask(new GameHeartbeat(), 20);
     }
 
     private function registerListener(Listener $listener): void {
         $this->getServer()->getPluginManager()->registerEvents($listener, $this);
+    }
+
+    public function getGameManager(): GameManager {
+        return $this->gameManager;
     }
 
 }

@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\game\cage;
+namespace sergittos\skywars\game\cage;
 
 
 class CageManager {

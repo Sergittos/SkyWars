@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\utils;
+namespace sergittos\skywars\utils;
 
 
 class ConfigGetter {

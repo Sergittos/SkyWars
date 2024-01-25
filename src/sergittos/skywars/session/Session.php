@@ -9,10 +9,11 @@
 declare(strict_types=1);
 
 
-namespace sergittos\skywars\sergittos\skywars\session;
+namespace sergittos\skywars\session;
 
 
 use pocketmine\player\Player;
+use sergittos\skywars\utils\ColorUtils;
 
 class Session {
 
@@ -24,6 +25,14 @@ class Session {
 
     public function getPlayer(): Player {
         return $this->player;
+    }
+
+    public function getUsername(): string {
+        return $this->player->getName();
+    }
+
+    public function message(string $message): void {
+        $this->player->sendMessage(ColorUtils::translate($message));
     }
 
 }
