@@ -12,6 +12,18 @@ declare(strict_types=1);
 namespace sergittos\skywars\sergittos\skywars\session;
 
 
+use pocketmine\player\Player;
+
 class Session {
+
+    private Player $player;
+
+    public function __construct(Player $player) {
+        $this->player = $player;
+    }
+
+    public function getPlayer(): Player {
+        return $this->player;
+    }
 
 }
