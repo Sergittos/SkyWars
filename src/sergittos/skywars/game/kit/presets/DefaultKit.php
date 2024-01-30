@@ -12,6 +12,30 @@ declare(strict_types=1);
 namespace sergittos\skywars\game\kit\presets;
 
 
-class DefaultKit {
+use pocketmine\item\VanillaItems;
+use sergittos\skywars\game\kit\Kit;
+use sergittos\skywars\game\kit\Rarity;
+
+class DefaultKit extends Kit {
+
+    public function __construct() {
+        parent::__construct("Default", Rarity::COMMON);
+    }
+
+    protected function getNormalContents(): array {
+        return [
+            VanillaItems::STONE_PICKAXE(),
+            VanillaItems::STONE_AXE(),
+            VanillaItems::STONE_SHOVEL()
+        ];
+    }
+
+    protected function getInsaneContents(): array {
+        return [
+            VanillaItems::IRON_PICKAXE(),
+            VanillaItems::IRON_AXE(),
+            VanillaItems::IRON_SHOVEL()
+        ];
+    }
 
 }

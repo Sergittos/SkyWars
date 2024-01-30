@@ -14,4 +14,9 @@ namespace sergittos\skywars\game\kit;
 
 enum Rarity {
 
+    case COMMON;
+    case RARE;
+    case LEGENDARY;
+    case MYTHIC;
+
 }
