@@ -14,6 +14,7 @@ namespace sergittos\skywars\game;
 
 use pocketmine\math\Vector3;
 use pocketmine\Server;
+use pocketmine\utils\Utils;
 use pocketmine\world\World;
 use sergittos\skywars\game\map\Map;
 use sergittos\skywars\game\stage\Stage;
@@ -27,6 +28,7 @@ class Game {
 
     private Map $map;
     private Stage $stage;
+    private Difficulty $difficulty = Difficulty::NORMAL;
 
     private ?World $world = null;
 
@@ -45,7 +47,7 @@ class Game {
     public function __construct(Map $map, int $id) {
         $this->map = $map;
         $this->id = $id;
-        // todo: add teams
+        $this->teams = Utils::cloneObjectArray($map->getTeams());
 
         $this->setStage(new WaitingStage());
     }
@@ -54,12 +56,16 @@ class Game {
         return $this->id;
     }
 
+    public function getMap(): Map {
+        return $this->map;
+    }
+
     public function getStage(): Stage {
         return $this->stage;
     }
 
-    public function getMap(): Map {
-        return $this->map;
+    public function getDifficulty(): Difficulty {
+        return $this->difficulty;
     }
 
     public function getWorld(): ?World {
@@ -121,16 +127,24 @@ class Game {
         $this->stage->start($this);
     }
 
+    public function setDifficulty(Difficulty $difficulty): void {
+        $this->difficulty = $difficulty;
+    }
+
     public function addBlock(Vector3 $position): void {
         $this->blocks[] = $position;
     }
 
     public function addPlayer(Session $session): void {
         $this->players[] = $session;
+
+        $this->stage->onJoin($session);
     }
 
     public function removePlayer(Session $session): void {
         unset($this->players[array_search($session, $this->players, true)]);
+
+        $this->stage->onQuit($session);
     }
 
     public function addSpectator(Session $session): void {

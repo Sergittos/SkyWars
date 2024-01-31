@@ -12,6 +12,42 @@ declare(strict_types=1);
 namespace sergittos\skywars\game\map;
 
 
-class MapProperties {
+use pocketmine\math\Vector3;
+use pocketmine\world\World;
+
+trait MapProperties {
+
+    protected string $id;
+    protected string $name;
+
+    protected World $waitingWorld;
+    protected Vector3 $spectatorSpawnPosition;
+    protected Mode $mode;
+
+    protected int $slots;
+
+    public function getId(): string {
+        return $this->id;
+    }
+
+    public function getName(): string {
+        return $this->name;
+    }
+
+    public function getWaitingWorld(): World {
+        return $this->waitingWorld;
+    }
+
+    public function getSpectatorSpawnPosition(): Vector3 {
+        return $this->spectatorSpawnPosition;
+    }
+
+    public function getMode(): Mode {
+        return $this->mode;
+    }
+
+    public function getSlots(): int {
+        return $this->slots;
+    }
 
 }

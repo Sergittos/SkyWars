@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace sergittos\skywars\game\stage;
 
 
-use skywars\game\stage\trait\JoinableTrait;
+use sergittos\skywars\game\stage\trait\JoinableTrait;
 use sergittos\skywars\session\Session;
 
 class StartingStage extends Stage {

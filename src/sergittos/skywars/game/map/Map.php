@@ -12,6 +12,34 @@ declare(strict_types=1);
 namespace sergittos\skywars\game\map;
 
 
+use pocketmine\math\Vector3;
+use pocketmine\world\World;
+use sergittos\skywars\game\team\Team;
+
 class Map {
+    use MapProperties;
+
+    /** @var Team[] */
+    private array $teams;
+
+    /**
+     * @param Team[] $teams
+     */
+    public function __construct(string $id, string $name, World $waitingWorld, Vector3 $spectatorSpawnPosition, Mode $mode, int $slots, array $teams) {
+        $this->id = $id;
+        $this->name = $name;
+        $this->waitingWorld = $waitingWorld;
+        $this->spectatorSpawnPosition = $spectatorSpawnPosition;
+        $this->mode = $mode;
+        $this->slots = $slots;
+        $this->teams = $teams;
+    }
+
+    /**
+     * @return Team[]
+     */
+    public function getTeams(): array {
+        return $this->teams;
+    }
 
 }
