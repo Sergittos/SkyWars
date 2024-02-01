@@ -19,7 +19,7 @@ use sergittos\skywars\game\cage\Cage;
 
 class DefaultCage extends Cage {
 
-    public function setBlocks(Vector3 $position): void {
+    protected function setBlocks(Vector3 $position): void {
         $block = $this->getFillingBlock();
 
         for($y = -1; $y <= 4; $y++) {
