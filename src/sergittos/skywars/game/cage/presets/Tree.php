@@ -12,15 +12,13 @@ declare(strict_types=1);
 namespace sergittos\skywars\game\cage\presets;
 
 
+use pocketmine\block\Block;
 use pocketmine\block\VanillaBlocks;
-use pocketmine\world\Position;
 
 class Tree extends DefaultCage {
 
-    public function build(Position $position): void {
-        foreach($this->getBlocks($position) as $block) {
-            $position->getWorld()->setBlock($block, VanillaBlocks::OAK_LEAVES());
-        }
+    protected function getFillingBlock(): Block {
+        return VanillaBlocks::OAK_LEAVES();
     }
     
 }
