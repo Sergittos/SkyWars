@@ -12,15 +12,20 @@ declare(strict_types=1);
 namespace sergittos\skywars\game;
 
 
-use pocketmine\math\Vector3;
+use pocketmine\block\inventory\ChestInventory;
 use pocketmine\Server;
 use pocketmine\utils\Utils;
 use pocketmine\world\World;
+use sergittos\skywars\game\chest\GameChest;
 use sergittos\skywars\game\map\Map;
 use sergittos\skywars\game\stage\Stage;
 use sergittos\skywars\game\stage\WaitingStage;
 use sergittos\skywars\game\team\Team;
 use sergittos\skywars\session\Session;
+use function array_key_exists;
+use function array_search;
+use function in_array;
+use function spl_object_id;
 
 class Game {
 
@@ -35,8 +40,8 @@ class Game {
     /** @var Team[] */
     private array $teams;
 
-    /** @var Vector3[] */
-    private array $blocks = [];
+    /** @var GameChest[] */
+    private array $openedChests = [];
 
     /** @var Session[] */
     private array $players = [];
@@ -73,6 +78,13 @@ class Game {
     }
 
     /**
+     * @return GameChest[]
+     */
+    public function getOpenedChests(): array {
+        return $this->openedChests;
+    }
+
+    /**
      * @return Team[]
      */
     public function getTeams(): array {
@@ -104,14 +116,8 @@ class Game {
         return count($this->players);
     }
 
-    public function checkBlock(Vector3 $position): bool {
-        foreach($this->blocks as $index => $block) {
-            if($block->equals($position)) {
-                unset($this->blocks[$index]);
-                return true;
-            }
-        }
-        return false;
+    private function isChestOpened(ChestInventory $inventory): bool {
+        return array_key_exists(spl_object_id($inventory), $this->openedChests);
     }
 
     public function isPlaying(Session $session): bool {
@@ -131,8 +137,20 @@ class Game {
         $this->difficulty = $difficulty;
     }
 
-    public function addBlock(Vector3 $position): void {
-        $this->blocks[] = $position;
+    public function openChest(ChestInventory $inventory): void {
+        if(!$this->isChestOpened($inventory)) {
+            $this->openedChests[spl_object_id($inventory)] = new GameChest($inventory);
+        }
+    }
+
+    public function closeChest(ChestInventory $inventory): void {
+        if($this->isChestOpened($inventory)) {
+            $chest = $this->openedChests[$chestId = spl_object_id($inventory)];
+            $chest->getFloatingTextParticle()->setInvisible();
+            $chest->updateFloatingText();
+
+            unset($this->openedChests[$chestId]);
+        }
     }
 
     public function addPlayer(Session $session): void {
@@ -166,7 +184,6 @@ class Game {
             Server::getInstance()->getWorldManager()->unloadWorld($this->world);
 
             $this->world = null;
-            $this->blocks = [];
         }
     }
 
