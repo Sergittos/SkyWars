@@ -12,8 +12,22 @@ declare(strict_types=1);
 namespace sergittos\skywars\game\stage;
 
 
+use pocketmine\player\GameMode;
+use sergittos\skywars\session\Session;
+
 class PlayingStage extends Stage {
 
-    public function tick(): void {}
+    public function onJoin(Session $session): void {
+        $session->getSelectedKit()->apply($session);
+        $session->getSelectedCage()->destroy($this->game->getWorld());
+
+        $session->getPlayer()->setGamemode(GameMode::SURVIVAL);
+    }
+
+    public function tick(): void {
+        foreach($this->game->getOpenedChests() as $chest) {
+            $chest->attemptToRefill($this->game);
+        }
+    }
 
 }

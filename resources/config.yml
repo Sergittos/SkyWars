@@ -1,0 +1,2 @@
+# Time (in seconds) that it takes for a chest to refill automatically after being opened
+chest-refill-delay: 180

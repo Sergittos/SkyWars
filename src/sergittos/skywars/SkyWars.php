@@ -17,6 +17,7 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\utils\SingletonTrait;
 use sergittos\skywars\game\GameHeartbeat;
 use sergittos\skywars\game\GameManager;
+use sergittos\skywars\listener\GameListener;
 use sergittos\skywars\listener\SessionListener;
 
 class SkyWars extends PluginBase {
@@ -31,6 +32,7 @@ class SkyWars extends PluginBase {
     protected function onEnable(): void {
         $this->gameManager = new GameManager();
 
+        $this->registerListener(new GameListener());
         $this->registerListener(new SessionListener());
 
         $this->getScheduler()->scheduleRepeatingTask(new GameHeartbeat(), 20);
