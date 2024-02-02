@@ -36,7 +36,7 @@ class Cannoneer extends Kit {
 
     protected function getNormalArmorContents(): array {
         return [
-            VanillaItems::IRON_BOOTS()
+            3 => VanillaItems::IRON_BOOTS()
                 ->addEnchantment(new EnchantmentInstance(VanillaEnchantments::FEATHER_FALLING(), 4))
                 ->addEnchantment(new EnchantmentInstance(VanillaEnchantments::BLAST_PROTECTION(), 3)),
         ];
@@ -53,7 +53,7 @@ class Cannoneer extends Kit {
 
     protected function getInsaneArmorContents(): array {
         return [
-            VanillaItems::DIAMOND_BOOTS()
+            3 => VanillaItems::DIAMOND_BOOTS()
                 ->addEnchantment(new EnchantmentInstance(VanillaEnchantments::FEATHER_FALLING(), 4))
                 ->addEnchantment(new EnchantmentInstance(VanillaEnchantments::BLAST_PROTECTION(), 4)),
         ];

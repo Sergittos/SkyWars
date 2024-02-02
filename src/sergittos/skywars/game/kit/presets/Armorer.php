@@ -24,15 +24,15 @@ class Armorer extends Kit {
 
     protected function getNormalArmorContents(): array {
         return [
-            VanillaItems::GOLDEN_CHESTPLATE(),
-            VanillaItems::GOLDEN_LEGGINGS()
+            1 => VanillaItems::GOLDEN_CHESTPLATE(),
+            2 => VanillaItems::GOLDEN_LEGGINGS()
         ];
     }
 
     protected function getInsaneArmorContents(): array {
         return [
-            VanillaItems::DIAMOND_CHESTPLATE(),
-            VanillaItems::IRON_LEGGINGS()
+            1 => VanillaItems::DIAMOND_CHESTPLATE(),
+            2 => VanillaItems::IRON_LEGGINGS()
         ];
     }
 

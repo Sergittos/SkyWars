@@ -12,7 +12,11 @@ declare(strict_types=1);
 namespace sergittos\skywars\game\kit;
 
 
+use pocketmine\item\Armor;
 use pocketmine\item\Item;
+use sergittos\skywars\game\Difficulty;
+use sergittos\skywars\session\Session;
+use function array_map;
 
 abstract class Kit {
 
@@ -36,12 +40,43 @@ abstract class Kit {
     /**
      * @return Item[]
      */
+    public function getContents(Difficulty $difficulty): array {
+        return match($difficulty) {
+            Difficulty::NORMAL => $this->getNormalContents(),
+            Difficulty::INSANE => $this->getInsaneContents()
+        };
+    }
+
+    /**
+     * @return Item[]
+     */
+    public function getArmorContents(Difficulty $difficulty): array {
+        return match($difficulty) {
+            Difficulty::NORMAL => $this->getNormalArmorContents(),
+            Difficulty::INSANE => $this->getInsaneArmorContents()
+        };
+    }
+
+    public function apply(Session $session): void {
+        $player = $session->getPlayer();
+        $difficulty = $session->getGame()->getDifficulty();
+
+        $player->getInventory()->setContents($this->getContents($difficulty));
+        $player->getArmorInventory()->setContents(array_map(function(Armor $armor) use ($session): Item {
+            return $armor->setCustomColor($session->getTeam()->getDyeColor()->getRgbValue());
+        }, $this->getArmorContents($difficulty)));
+
+    }
+
+    /**
+     * @return Item[]
+     */
     protected function getNormalContents(): array {
         return [];
     }
 
     /**
-     * @return Item[]
+     * @return Armor[]
      */
     protected function getNormalArmorContents(): array {
         return [];
@@ -55,7 +90,7 @@ abstract class Kit {
     }
 
     /**
-     * @return Item[]
+     * @return Armor[]
      */
     protected function getInsaneArmorContents(): array {
         return [];
