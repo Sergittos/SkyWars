@@ -11,11 +11,12 @@ declare(strict_types=1);
 
 namespace sergittos\skywars\utils;
 
+use pocketmine\block\utils\DyeColor;
 use pocketmine\utils\TextFormat;
 
 class ColorUtils {
 
-    public static function translate(string $message): string {
+    static public function translate(string $message): string {
         $message = str_replace("{BLACK}", TextFormat::BLACK, $message);
         $message = str_replace("{DARK_BLUE}", TextFormat::DARK_BLUE, $message);
         $message = str_replace("{BLUE}", TextFormat::DARK_BLUE, $message);
@@ -44,6 +45,24 @@ class ColorUtils {
         $message = str_replace("{RESET}", TextFormat::RESET, $message);
 
         return $message;
+    }
+
+    static public function getDyeColor(string $color): DyeColor {
+        return match($color) {
+            TextFormat::BLACK => DyeColor::BLACK,
+            TextFormat::DARK_BLUE => DyeColor::BLUE,
+            TextFormat::DARK_GREEN => DyeColor::GREEN,
+            TextFormat::DARK_PURPLE => DyeColor::MAGENTA,
+            TextFormat::GOLD => DyeColor::ORANGE,
+            TextFormat::GRAY => DyeColor::LIGHT_GRAY,
+            TextFormat::DARK_GRAY => DyeColor::GRAY,
+            TextFormat::BLUE => DyeColor::CYAN,
+            TextFormat::GREEN => DyeColor::LIME,
+            TextFormat::RED => DyeColor::RED,
+            TextFormat::LIGHT_PURPLE => DyeColor::PINK,
+            TextFormat::YELLOW => DyeColor::YELLOW,
+            TextFormat::WHITE => DyeColor::WHITE,
+        };
     }
 
 }

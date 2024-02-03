@@ -25,10 +25,9 @@ class Map {
     /**
      * @param Team[] $teams
      */
-    public function __construct(string $id, string $name, World $waitingWorld, Vector3 $spectatorSpawnPosition, Mode $mode, int $slots, array $teams) {
+    public function __construct(string $id, string $name, Vector3 $spectatorSpawnPosition, Mode $mode, int $slots, array $teams) {
         $this->id = $id;
         $this->name = $name;
-        $this->waitingWorld = $waitingWorld;
         $this->spectatorSpawnPosition = $spectatorSpawnPosition;
         $this->mode = $mode;
         $this->slots = $slots;

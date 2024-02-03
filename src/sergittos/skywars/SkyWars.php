@@ -19,18 +19,25 @@ use sergittos\skywars\game\GameHeartbeat;
 use sergittos\skywars\game\GameManager;
 use sergittos\skywars\listener\GameListener;
 use sergittos\skywars\listener\SessionListener;
+use sergittos\skywars\utils\message\MessageManager;
 
 class SkyWars extends PluginBase {
     use SingletonTrait;
 
     private GameManager $gameManager;
+    private MessageManager $messageManager;
 
     protected function onLoad(): void {
         self::setInstance($this);
+
+        $this->saveResource("messages.json", true); // TODO: Set "replace" to false on production
     }
 
     protected function onEnable(): void {
+        $this->getServer()->getWorldManager()->loadWorld("sw"); // just for testing
+
         $this->gameManager = new GameManager();
+        $this->messageManager = new MessageManager();
 
         $this->registerListener(new GameListener());
         $this->registerListener(new SessionListener());
@@ -44,6 +51,10 @@ class SkyWars extends PluginBase {
 
     public function getGameManager(): GameManager {
         return $this->gameManager;
+    }
+
+    public function getMessageManager(): MessageManager {
+        return $this->messageManager;
     }
 
 }

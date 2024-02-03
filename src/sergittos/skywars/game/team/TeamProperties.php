@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace sergittos\skywars\game\team;
 
 
+use pocketmine\block\utils\DyeColor;
 use pocketmine\math\Vector3;
 use sergittos\skywars\utils\ColorUtils;
 use function strtoupper;
@@ -31,6 +32,10 @@ trait TeamProperties {
 
     public function getColor(): string {
         return ColorUtils::translate("{" . strtoupper($this->name) . "}");
+    }
+
+    public function getDyeColor(): DyeColor {
+        return ColorUtils::getDyeColor($this->getColor());
     }
 
     public function getSpawnPoint(): Vector3 {

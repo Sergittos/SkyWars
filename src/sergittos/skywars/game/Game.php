@@ -15,13 +15,17 @@ namespace sergittos\skywars\game;
 use pocketmine\block\inventory\ChestInventory;
 use pocketmine\Server;
 use pocketmine\utils\Utils;
+use pocketmine\world\sound\Sound;
 use pocketmine\world\World;
+use pocketmine\world\WorldException;
 use sergittos\skywars\game\chest\GameChest;
 use sergittos\skywars\game\map\Map;
 use sergittos\skywars\game\stage\Stage;
+use sergittos\skywars\game\stage\StartingStage;
 use sergittos\skywars\game\stage\WaitingStage;
 use sergittos\skywars\game\team\Team;
 use sergittos\skywars\session\Session;
+use sergittos\skywars\utils\message\MessageContainer;
 use function array_key_exists;
 use function array_search;
 use function in_array;
@@ -74,6 +78,7 @@ class Game {
     }
 
     public function getWorld(): ?World {
+        return Server::getInstance()->getWorldManager()->getWorldByName("sw"); // just for testing
         return $this->world;
     }
 
@@ -89,6 +94,13 @@ class Game {
      */
     public function getTeams(): array {
         return $this->teams;
+    }
+
+    /**
+     * @return Team[]
+     */
+    public function getAvailableTeams(): array {
+        return array_filter($this->teams, fn(Team $team) => !$team->isFull());
     }
 
     /**
@@ -114,6 +126,10 @@ class Game {
 
     public function getPlayersCount(): int {
         return count($this->players);
+    }
+
+    public function canBeJoined(): bool {
+        return $this->getPlayersCount() < $this->map->getSlots() and ($this->stage instanceof WaitingStage or $this->stage instanceof StartingStage);
     }
 
     private function isChestOpened(ChestInventory $inventory): bool {
@@ -173,9 +189,27 @@ class Game {
         unset($this->spectators[array_search($session, $this->spectators, true)]);
     }
 
-    public function broadcastMessage(string $message): void {
+    public function broadcastMessage(MessageContainer $container): void {
         foreach($this->getPlayersAndSpectators() as $session) {
-            $session->message($message);
+            $session->sendMessage($container);
+        }
+    }
+
+    public function broadcastTitle(MessageContainer $title, ?MessageContainer $subtitle = null, int $fadeIn = -1, int $stay = -1, int $fadeOut = -1): void {
+        foreach($this->getPlayersAndSpectators() as $session) {
+            $session->sendTitle($title, $subtitle, $fadeIn, $stay, $fadeOut);
+        }
+    }
+
+    public function broadcastActionBar(MessageContainer $container): void {
+        foreach($this->getPlayersAndSpectators() as $session) {
+            $session->sendActionBar($container);
+        }
+    }
+
+    public function broadcastSound(Sound $sound): void {
+        foreach($this->getPlayersAndSpectators() as $session) {
+            $session->playSound($sound);
         }
     }
 
@@ -185,6 +219,20 @@ class Game {
 
             $this->world = null;
         }
+    }
+
+    public function setupWorld(): void {
+        $name = $this->map->getName() . "-" . $this->id;
+
+        $world_manager = Server::getInstance()->getWorldManager();
+        if(!$world_manager->loadWorld($name)) {
+            throw new WorldException("Failed to load world");
+        }
+
+        $this->world = $world_manager->getWorldByName($name);
+        $this->world->setAutoSave(false);
+        $this->world->setTime(World::TIME_DAY);
+        $this->world->stopTime();
     }
 
 }

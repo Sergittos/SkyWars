@@ -13,14 +13,12 @@ namespace sergittos\skywars\game\map;
 
 
 use pocketmine\math\Vector3;
-use pocketmine\world\World;
 
 trait MapProperties {
 
     protected string $id;
     protected string $name;
 
-    protected World $waitingWorld;
     protected Vector3 $spectatorSpawnPosition;
     protected Mode $mode;
 
@@ -32,10 +30,6 @@ trait MapProperties {
 
     public function getName(): string {
         return $this->name;
-    }
-
-    public function getWaitingWorld(): World {
-        return $this->waitingWorld;
     }
 
     public function getSpectatorSpawnPosition(): Vector3 {

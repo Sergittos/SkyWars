@@ -26,9 +26,7 @@ class WaitingStage extends Stage {
     }
 
     private function startIfReady(): void {
-        // todo
+        $this->game->setStage(new StartingStage());
     }
-
-    public function tick(): void {}
 
 }

@@ -12,11 +12,11 @@ declare(strict_types=1);
 namespace sergittos\skywars\game\map;
 
 
-enum Mode {
+enum Mode: int {
 
-    case SOLOS;
-    case DUOS;
-    case TRIOS;
-    case SQUADS;
+    case SOLOS = 1;
+    case DUOS = 2;
+    case TRIOS = 3;
+    case SQUADS = 4;
 
 }

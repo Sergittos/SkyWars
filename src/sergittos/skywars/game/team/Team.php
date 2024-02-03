@@ -13,20 +13,21 @@ namespace sergittos\skywars\game\team;
 
 
 use pocketmine\math\Vector3;
-use pocketmine\player\GameMode;
-use pocketmine\world\Position;
 use sergittos\skywars\session\Session;
 use function in_array;
 
 class Team {
     use TeamProperties;
 
+    private int $slots;
+
     /** @var Session[] */
     private array $members = [];
 
-    public function __construct(string $name, Vector3 $spawnPoint) {
+    public function __construct(string $name, Vector3 $spawnPoint, int $slots) {
         $this->name = $name;
         $this->spawnPoint = $spawnPoint;
+        $this->slots = $slots;
     }
 
     public function getColoredName(): string {
@@ -48,6 +49,10 @@ class Team {
         return count($this->members);
     }
 
+    public function isFull(): bool {
+        return $this->getMembersCount() >= $this->slots;
+    }
+
     public function isAlive(): bool {
         return $this->getMembersCount() > 0;
     }
@@ -60,19 +65,14 @@ class Team {
         $this->members[] = $session;
 
         $session->setTeam($this);
-        $session->clearInventories();
-        // todo: give kit, apply perks, etc.
-
-        $player = $session->getPlayer();
-        $player->setNameTag($this->getColoredName() . $this->getFirstLetter() . " " . $player->getName());
-        $player->setGamemode(GameMode::SURVIVAL);
-        $player->teleport(Position::fromObject($this->spawnPoint, $session->getGame()->getWorld()));
+        $session->getPlayer()->setNameTag($this->getColoredName() . $this->getFirstLetter() . " " . $session->getUsername());
     }
 
     public function removeMember(Session $session): void {
         unset($this->members[array_search($session, $this->members, true)]);
 
         $session->setTeam(null);
+        $session->getPlayer()->setNameTag($session->getUsername());
     }
 
     public function reset(): void {

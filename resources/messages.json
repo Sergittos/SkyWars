@@ -1,0 +1,16 @@
+{
+  "PLAYER_JOINED": "{GRAY}{player} {YELLOW}has joined ({AQUA}{count}{YELLOW}/{AQUA}{slots}{YELLOW})!",
+  "PLAYER_QUIT": "{GRAY}{player} {YELLOW}has quit!",
+  "SELECTED_KIT": "{YELLOW}Selected Kit: {GREEN}{kit}",
+  "GAME_JOIN_TITLE": "{YELLOW}SkyWars",
+  "GAME_JOIN_SUBTITLE": "{GREEN}{mode} mode",
+  "GAME_STARTING": "{YELLOW}The game starts in {color}{time} {YELLOW}seconds!",
+  "10_SECONDS_TITLE": "{YELLOW}10 seconds",
+  "10_SECONDS_SUBTITLE": "{YELLOW}Right-click the bow to pick a kit!",
+  "LAST_COUNTDOWN_TITLE": "{color}{time}",
+  "LAST_COUNTDOWN_SUBTITLE": "{YELLOW}Prepare to fight!",
+  "CAGES_OPENED": "{YELLOW}Cages opened! {RED}FIGHT!",
+
+  "SCOREBOARD_TITLE": "{YELLOW}{BOLD}SKYWARS",
+  "SCOREBOARD_IP": "{YELLOW}play.server.net"
+}
