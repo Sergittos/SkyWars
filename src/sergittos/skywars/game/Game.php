@@ -97,13 +97,6 @@ class Game {
     }
 
     /**
-     * @return Team[]
-     */
-    public function getAvailableTeams(): array {
-        return array_filter($this->teams, fn(Team $team) => !$team->isFull());
-    }
-
-    /**
      * @return Session[]
      */
     public function getPlayers(): array {
