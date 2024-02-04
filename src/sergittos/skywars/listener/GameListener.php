@@ -13,12 +13,16 @@ namespace sergittos\skywars\listener;
 
 
 use pocketmine\block\Chest as ChestBlock;
-use pocketmine\block\inventory\ChestInventory;
 use pocketmine\block\tile\Chest as ChestTile;
 use pocketmine\event\block\BlockBreakEvent;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\inventory\InventoryOpenEvent;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerItemUseEvent;
 use pocketmine\item\Item;
+use pocketmine\player\Player;
+use sergittos\skywars\game\chest\ChestInventory;
 use sergittos\skywars\session\SessionFactory;
 use function array_filter;
 
@@ -56,6 +60,54 @@ class GameListener implements Listener {
             $game->closeChest($inventory);
             
             $event->setDrops(array_filter($event->getDrops(), fn(Item $item) => $inventory->contains($item)));
+        }
+    }
+
+    public function onFight(EntityDamageByEntityEvent $event): void {
+        $damager = $event->getDamager();
+        $entity = $event->getEntity();
+
+        if(!$damager instanceof Player or !$entity instanceof Player or !SessionFactory::hasSession($damager) or !SessionFactory::hasSession($entity)) {
+            return;
+        }
+
+        $damagerSession = SessionFactory::getSession($damager);
+        $entitySession = SessionFactory::getSession($entity);
+
+        if(!$damagerSession->isPlaying() or !$entitySession->isPlaying()) {
+            return;
+        }
+
+        if($damagerSession->getTeam()->hasMember($entitySession)) {
+            $event->cancel();
+        } else {
+            $entitySession->setLastSessionHit($damagerSession);
+        }
+    }
+
+    public function onReceiveDamage(EntityDamageEvent $event): void {
+        $entity = $event->getEntity();
+        if(!$entity instanceof Player) {
+            return;
+        }
+
+        $session = SessionFactory::getSession($entity);
+        if(!$session->isPlaying()) {
+            return;
+        }
+
+        if($event->getFinalDamage() >= $entity->getHealth()) {
+            $session->kill($event->getCause());
+            $event->cancel();
+        }
+    }
+
+    /**
+     * @handleCancelled
+     */
+    public function onItemUse(PlayerItemUseEvent $event): void {
+        if(SessionFactory::getSession($event->getPlayer())->isSpectator()) {
+            $event->uncancel();
         }
     }
 

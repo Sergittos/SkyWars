@@ -12,12 +12,12 @@ declare(strict_types=1);
 namespace sergittos\skywars\game;
 
 
-use pocketmine\block\inventory\ChestInventory;
 use pocketmine\Server;
 use pocketmine\utils\Utils;
 use pocketmine\world\sound\Sound;
 use pocketmine\world\World;
 use pocketmine\world\WorldException;
+use sergittos\skywars\game\chest\ChestInventory;
 use sergittos\skywars\game\chest\GameChest;
 use sergittos\skywars\game\map\Map;
 use sergittos\skywars\game\stage\Stage;
@@ -155,7 +155,7 @@ class Game {
     public function closeChest(ChestInventory $inventory): void {
         if($this->isChestOpened($inventory)) {
             $chest = $this->openedChests[$chestId = spl_object_id($inventory)];
-            $chest->getFloatingTextParticle()->setInvisible();
+            $chest->hideFloatingTexts();
             $chest->updateFloatingText();
 
             unset($this->openedChests[$chestId]);
@@ -168,18 +168,33 @@ class Game {
         $this->stage->onJoin($session);
     }
 
-    public function removePlayer(Session $session): void {
+    public function removePlayer(Session $session, bool $teleportToHub = true, bool $setSpectator = false): void {
         unset($this->players[array_search($session, $this->players, true)]);
 
         $this->stage->onQuit($session);
+
+        if($teleportToHub) {
+            $session->teleportToHub();
+        }
+
+        if($setSpectator) {
+            $this->addSpectator($session);
+        } else {
+            $session->setGame(null);
+        }
     }
 
     public function addSpectator(Session $session): void {
         $this->spectators[] = $session;
+
+        $session->giveSpectatorItems();
     }
 
     public function removeSpectator(Session $session): void {
         unset($this->spectators[array_search($session, $this->spectators, true)]);
+
+        $session->setGame(null);
+        $session->teleportToHub();
     }
 
     public function broadcastMessage(MessageContainer $container): void {

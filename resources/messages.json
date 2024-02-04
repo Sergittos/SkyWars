@@ -1,4 +1,11 @@
 {
+  "KIT_SELECTOR": "{GREEN}Kit Selector {GRAY}(Right Click)",
+  "SKYWARS_CHALLENGES": "{GREEN}SkyWars Challenges {GRAY}(Right Click)",
+  "RETURN_TO_LOBBY": "{RED}{BOLD}Return to Lobby {RESET}{GRAY}(Right Click)",
+  "TELEPORTER": "{GREEN}{BOLD}Teleporter {RESET}{GRAY}(Right Click)",
+  "SPECTATOR_SETTINGS": "{AQUA}{BOLD}Spectator Settings {RESET}{GRAY}(Right Click)",
+  "PLAY_AGAIN": "{AQUA}{BOLD}Play Again {RESET}{GRAY}(Right Click)",
+
   "PLAYER_JOINED": "{GRAY}{player} {YELLOW}has joined ({AQUA}{count}{YELLOW}/{AQUA}{slots}{YELLOW})!",
   "PLAYER_QUIT": "{GRAY}{player} {YELLOW}has quit!",
   "SELECTED_KIT": "{YELLOW}Selected Kit: {GREEN}{kit}",
@@ -10,6 +17,17 @@
   "LAST_COUNTDOWN_TITLE": "{color}{time}",
   "LAST_COUNTDOWN_SUBTITLE": "{YELLOW}Prepare to fight!",
   "CAGES_OPENED": "{YELLOW}Cages opened! {RED}FIGHT!",
+  "YOU_DIED_TITLE": "{RED}{BOLD}YOU DIED!",
+  "YOU_DIED_SUBTITLE": "{GRAY}You are now a spectator!",
+  "VICTORY_TITLE": "{GOLD}{BOLD}VICTORY!",
+  "VICTORY_SUBTITLE": "{GRAY}You were the last man standing!",
+  "GAME_END_TITLE": "{RED}{BOLD}GAME END",
+  "GAME_END_SUBTITLE": "{GRAY}You weren't victorious this time",
+
+  "PLAYER_FELL_TO_THE_VOID": "{GRAY}{player} {GRAY}fell to the void.",
+  "PLAYER_WAS_KNOCKED_INTO_THE_VOID": "{player} {GRAY}was knocked into the void by {killer}{GRAY}.",
+  "PLAYER_WAS_KILLED_BY_PLAYER": "{player} {GRAY}was killed by {killer}{GRAY}.",
+  "PLAYERS_REMAINING": "{YELLOW}There are {RED}{count} {YELLOW}players remaining!",
 
   "SCOREBOARD_TITLE": "{YELLOW}{BOLD}SKYWARS",
   "SCOREBOARD_IP": "{YELLOW}play.server.net"

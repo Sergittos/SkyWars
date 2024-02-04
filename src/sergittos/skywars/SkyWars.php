@@ -12,12 +12,15 @@ declare(strict_types=1);
 namespace sergittos\skywars;
 
 
+use pocketmine\block\tile\TileFactory;
 use pocketmine\event\Listener;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\SingletonTrait;
+use sergittos\skywars\game\chest\ChestTile;
 use sergittos\skywars\game\GameHeartbeat;
 use sergittos\skywars\game\GameManager;
 use sergittos\skywars\listener\GameListener;
+use sergittos\skywars\listener\ItemListener;
 use sergittos\skywars\listener\SessionListener;
 use sergittos\skywars\utils\message\MessageManager;
 
@@ -36,10 +39,13 @@ class SkyWars extends PluginBase {
     protected function onEnable(): void {
         $this->getServer()->getWorldManager()->loadWorld("sw"); // just for testing
 
+        TileFactory::getInstance()->register(ChestTile::class, ["Chest", "minecraft:chest"]);
+
         $this->gameManager = new GameManager();
         $this->messageManager = new MessageManager();
 
         $this->registerListener(new GameListener());
+        $this->registerListener(new ItemListener());
         $this->registerListener(new SessionListener());
 
         $this->getScheduler()->scheduleRepeatingTask(new GameHeartbeat(), 20);

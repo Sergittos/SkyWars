@@ -12,15 +12,20 @@ declare(strict_types=1);
 namespace sergittos\skywars\session;
 
 
+use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\network\mcpe\protocol\ClientboundPacket;
+use pocketmine\player\GameMode;
 use pocketmine\player\Player;
+use pocketmine\Server;
 use pocketmine\world\sound\Sound;
 use sergittos\skywars\game\cage\Cage;
 use sergittos\skywars\game\cage\CageRegistry;
 use sergittos\skywars\game\Game;
 use sergittos\skywars\game\kit\Kit;
 use sergittos\skywars\game\kit\KitRegistry;
+use sergittos\skywars\game\stage\EndingStage;
 use sergittos\skywars\game\team\Team;
+use sergittos\skywars\item\SkywarsItemRegistry;
 use sergittos\skywars\session\scoreboard\LobbyScoreboard;
 use sergittos\skywars\session\scoreboard\Scoreboard;
 use sergittos\skywars\utils\message\MessageContainer;
@@ -33,6 +38,9 @@ class Session {
     private ?Game $game = null;
     private ?Team $team = null;
 
+    private ?Session $lastSessionHit = null;
+    private ?Session $trackingSession = null;
+
     private Kit $selectedKit;
     private Cage $selectedCage;
 
@@ -44,7 +52,6 @@ class Session {
 
     public function __construct(Player $player) {
         $this->player = $player;
-        $this->scoreboard = new LobbyScoreboard($this);
         $this->selectedKit = KitRegistry::DEFAULT(); // TODO: Get this from the database
         $this->selectedCage = CageRegistry::DEFAULT(); // TODO: Get this from the database
     }
@@ -57,12 +64,28 @@ class Session {
         return $this->player->getName();
     }
 
+    public function getColoredUsername(): string {
+        $username = $this->getUsername();
+        if($this->hasTeam()) {
+            return $this->team->getColor() . $username;
+        }
+        return $username;
+    }
+
     public function getGame(): ?Game {
         return $this->game;
     }
 
     public function getTeam(): ?Team {
         return $this->team;
+    }
+
+    public function getLastSessionHit(): ?Session {
+        return $this->lastSessionHit;
+    }
+
+    public function getTrackingSession(): ?Session {
+        return $this->trackingSession;
     }
 
     public function getSelectedKit(): Kit {
@@ -107,10 +130,6 @@ class Session {
         return $this->hasGame() and $this->game->isSpectator($this);
     }
 
-    public function updateScoreboard(): void {
-        $this->scoreboard->show();
-    }
-
     public function setScoreboard(Scoreboard $scoreboard): void {
         $this->scoreboard = $scoreboard;
     }
@@ -121,6 +140,15 @@ class Session {
 
     public function setTeam(?Team $team): void {
         $this->team = $team;
+    }
+
+    public function setLastSessionHit(?Session $lastSessionHit): void {
+        $this->lastSessionHit = $lastSessionHit;
+    }
+
+    public function setTrackingSession(?Session $trackingSession): void {
+        $this->trackingSession = $trackingSession;
+        $this->updateCompassDirection();
     }
 
     public function setSelectedKit(Kit $selectedKit): void {
@@ -153,6 +181,16 @@ class Session {
         $this->cages[] = $cage;
     }
 
+    public function updateScoreboard(): void {
+        $this->scoreboard->show();
+    }
+
+    public function updateCompassDirection(): void {
+        $this->player->getNetworkSession()->syncWorldSpawnPoint(
+            $this->trackingSession !== null ? $this->trackingSession->getPlayer()->getPosition() : $this->player->getWorld()->getSpawnLocation()
+        );
+    }
+
     public function assignTeam(): void {
         foreach($this->game->getTeams() as $team) {
             if(!$team->isFull()) {
@@ -161,7 +199,6 @@ class Session {
             }
         }
     }
-
 
     public function clearInventories(): void {
         $this->player->getCursorInventory()->clearAll();
@@ -173,7 +210,74 @@ class Session {
     public function giveWaitingItems(): void {
         $this->clearInventories();
 
-        // TODO
+        $inventory = $this->player->getInventory();
+        $inventory->setItem(0, SkywarsItemRegistry::KIT_SELECTOR());
+        $inventory->setItem(7, SkywarsItemRegistry::SKYWARS_CHALLENGES());
+        $inventory->setItem(8, SkywarsItemRegistry::LEAVE_GAME());
+    }
+
+    public function giveSpectatorItems(): void {
+        $this->clearInventories();
+
+        $inventory = $this->player->getInventory();
+        $inventory->setItem(0, SkywarsItemRegistry::TELEPORTER());
+        $inventory->setItem(4, SkywarsItemRegistry::SPECTATOR_SETTINGS());
+        $inventory->setItem(7, SkywarsItemRegistry::PLAY_AGAIN());
+        $inventory->setItem(8, SkywarsItemRegistry::RETURN_TO_LOBBY());
+    }
+
+    public function teleportToHub(): void {
+        $this->player->getEffects()->clear();
+        $this->player->setGamemode(GameMode::ADVENTURE());
+        $this->player->setHealth($this->player->getMaxHealth());
+        $this->player->setNameTag($this->player->getDisplayName());
+        $this->player->teleport(Server::getInstance()->getWorldManager()->getDefaultWorld()->getSafeSpawn());
+
+        $this->clearInventories();
+        $this->setTrackingSession(null);
+        $this->setScoreboard(new LobbyScoreboard($this));
+    }
+
+    public function kill(int $cause): void {
+        $killerSession = $this->getLastSessionHit();
+        $username = $this->getColoredUsername();
+
+        if($killerSession !== null) {
+            // TODO: Add coins to the killer
+
+            $arguments = [
+                "player" => $username,
+                "killer" => $killerSession->getColoredUsername()
+            ];
+
+            if($cause === EntityDamageEvent::CAUSE_VOID) {
+                $this->game->broadcastMessage(new MessageContainer("PLAYER_WAS_KNOCKED_INTO_THE_VOID", $arguments));
+            } else {
+                $this->game->broadcastMessage(new MessageContainer("PLAYER_WAS_KILLED_BY_PLAYER", $arguments));
+            }
+        }
+
+        if($cause === EntityDamageEvent::CAUSE_VOID and $killerSession === null) {
+            $this->game->broadcastMessage(new MessageContainer("PLAYER_FELL_TO_THE_VOID", [
+                "player" => $username
+            ]));
+        }
+
+        $this->game->broadcastActionBar(new MessageContainer("PLAYERS_REMAINING", [
+            "count" => $this->game->getPlayersCount()
+        ]));
+
+        $this->player->getEffects()->clear();
+        $this->player->teleport($this->game->getMap()->getSpectatorSpawnPosition());
+        $this->player->setGamemode(GameMode::SPECTATOR);
+
+        if(!$this->game->getStage() instanceof EndingStage) {
+            $this->game->removePlayer($this, false, true);
+
+            $this->sendTitle(new MessageContainer("YOU_DIED_TITLE"), new MessageContainer("YOU_DIED_SUBTITLE"), 0, 100, 0);
+        } else {
+            $this->clearInventories();
+        }
     }
 
     public function playSound(Sound $sound): void {

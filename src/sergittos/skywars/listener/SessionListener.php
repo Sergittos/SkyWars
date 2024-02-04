@@ -27,7 +27,7 @@ class SessionListener implements Listener {
     }
 
     public function onJoin(PlayerJoinEvent $event): void {
-        SessionFactory::getSession($event->getPlayer())->updateScoreboard();
+        SessionFactory::getSession($event->getPlayer())->teleportToHub();
     }
 
     public function onChat(PlayerChatEvent $event): void { // just for testing

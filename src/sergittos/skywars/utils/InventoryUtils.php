@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace sergittos\skywars\utils;
 
 
-use pocketmine\block\inventory\ChestInventory;
 use pocketmine\item\VanillaItems;
+use sergittos\skywars\game\chest\ChestInventory;
 
 class InventoryUtils {
 
