@@ -125,7 +125,7 @@ class Game {
         return $this->getPlayersCount() < $this->map->getSlots() and ($this->stage instanceof WaitingStage or $this->stage instanceof StartingStage);
     }
 
-    private function isChestOpened(ChestInventory $inventory): bool {
+    public function isChestOpened(ChestInventory $inventory): bool {
         return array_key_exists(spl_object_id($inventory), $this->openedChests);
     }
 
@@ -148,7 +148,7 @@ class Game {
 
     public function openChest(ChestInventory $inventory): void {
         if(!$this->isChestOpened($inventory)) {
-            $this->openedChests[spl_object_id($inventory)] = new GameChest($inventory);
+            $this->openedChests[spl_object_id($inventory)] = new GameChest($this, $inventory);
         }
     }
 
@@ -156,7 +156,7 @@ class Game {
         if($this->isChestOpened($inventory)) {
             $chest = $this->openedChests[$chestId = spl_object_id($inventory)];
             $chest->hideFloatingTexts();
-            $chest->updateFloatingText();
+            $chest->updateFloatingText($this);
 
             unset($this->openedChests[$chestId]);
         }

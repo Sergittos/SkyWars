@@ -12,6 +12,20 @@ declare(strict_types=1);
 namespace sergittos\skywars\game\event;
 
 
-class GameEndEvent {
+use sergittos\skywars\game\stage\EndingStage;
+
+class GameEndEvent extends Event {
+
+    public function __construct() {
+        parent::__construct("Game End", 1.5);
+    }
+
+    protected function end(): void {
+        $this->game->setStage(new EndingStage());
+    }
+
+    public function getNextEvent(): ?Event {
+        return null;
+    }
 
 }

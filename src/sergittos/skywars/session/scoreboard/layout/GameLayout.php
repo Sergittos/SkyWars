@@ -15,16 +15,18 @@ namespace sergittos\skywars\session\scoreboard\layout;
 use sergittos\skywars\session\Session;
 use sergittos\skywars\utils\message\MessageContainer;
 use function date;
+use function gmdate;
 
 class GameLayout implements Layout {
 
     public function getMessageContainer(Session $session): MessageContainer {
         $game = $session->getGame();
+        $event = $game->getStage()->getNextEvent();
 
         return new MessageContainer("GAME_SCOREBOARD", [
             "date" => date("m/d/y"),
-            //"event" => $stage->getNextEvent()->getDisplayName(),
-            //"time" => $stage->getNextEvent()->getTimeRemaining(),
+            "event" => $event->getName(),
+            "time" => gmdate("i:s", $event->getTimeRemaining()),
             "players_count" => $game->getPlayersCount(),
             "kills" => $session->getStatistics()->getKills(null),
             "map" => $game->getMap()->getName(),

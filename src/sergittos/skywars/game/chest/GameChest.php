@@ -15,6 +15,7 @@ namespace sergittos\skywars\game\chest;
 use pocketmine\utils\TextFormat;
 use pocketmine\world\particle\FloatingTextParticle;
 use sergittos\skywars\game\Game;
+use sergittos\skywars\game\stage\PlayingStage;
 use sergittos\skywars\utils\ConfigGetter;
 use sergittos\skywars\utils\InventoryUtils;
 use function count;
@@ -27,25 +28,13 @@ class GameChest { // I should clean this class
     private FloatingTextParticle $floatingTextParticle;
     private FloatingTextParticle $isEmptyFloatingTextParticle;
 
-    private int $time;
-
-    public function __construct(ChestInventory $inventory) {
+    public function __construct(Game $game, ChestInventory $inventory) {
         $this->inventory = $inventory;
         $this->floatingTextParticle = new FloatingTextParticle("");
         $this->isEmptyFloatingTextParticle = new FloatingTextParticle(TextFormat::RED . "Empty!");
-        $this->time = ConfigGetter::getChestRefillDelay();
-        $this->updateFloatingText();
+        $this->updateFloatingText($game);
 
         InventoryUtils::fillChest($inventory);
-    }
-
-    public function attemptToRefill(Game $game): void {
-        $this->time--;
-
-        if($this->time <= 0) {
-            $this->refill($game);
-        }
-        $this->updateFloatingText();
     }
 
     public function refill(Game $game): void {
@@ -57,8 +46,8 @@ class GameChest { // I should clean this class
         $this->inventory->setNeedsRefill(false);
     }
 
-    public function updateFloatingText(): void {
-        $this->floatingTextParticle->setText(TextFormat::YELLOW . gmdate("i:s", $this->time));
+    public function updateFloatingText(Game $game): void {
+        $this->floatingTextParticle->setText(TextFormat::YELLOW . gmdate("i:s", $this->getTimeRemaining($game)));
         $this->isEmptyFloatingTextParticle->setInvisible(count($this->inventory->getContents()) > 0);
 
         $position = $this->inventory->getHolder();
@@ -71,6 +60,11 @@ class GameChest { // I should clean this class
     public function hideFloatingTexts(): void {
         $this->floatingTextParticle->setInvisible();
         $this->isEmptyFloatingTextParticle->setInvisible();
+    }
+
+    private function getTimeRemaining(Game $game): int {
+        $stage = $game->getStage();
+        return $stage instanceof PlayingStage ? $stage->getNextEvent()->getTimeRemaining() : 0;
     }
 
 }

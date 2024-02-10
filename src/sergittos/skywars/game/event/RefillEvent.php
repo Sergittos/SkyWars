@@ -12,6 +12,26 @@ declare(strict_types=1);
 namespace sergittos\skywars\game\event;
 
 
-class RefillEvent {
+use sergittos\skywars\utils\message\MessageContainer;
+
+class RefillEvent extends Event {
+
+    private bool $repeat;
+
+    public function __construct(bool $repeat = true) {
+        $this->repeat = $repeat;
+        parent::__construct("Refill", $repeat ? 3 : 2);
+    }
+
+    protected function end(): void {
+        foreach($this->game->getOpenedChests() as $chest) {
+            $chest->refill($this->game);
+        }
+        $this->game->broadcastTitle(new MessageContainer("CHESTS_REFILLED_TITLE"), null, 20, 60, 20);
+    }
+
+    public function getNextEvent(): ?Event {
+        return $this->repeat ? new RefillEvent(false) : new DoomEvent();
+    }
 
 }

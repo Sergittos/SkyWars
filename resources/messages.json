@@ -24,6 +24,9 @@
   "GAME_END_TITLE": "{RED}{BOLD}GAME END",
   "GAME_END_SUBTITLE": "{GRAY}You weren't victorious this time",
 
+  "CHESTS_REFILLED_TITLE": "{YELLOW}All Chests have been refilled!",
+  "SUDDEN_DEATH_TITLE": "{RED}Sudden Death",
+
   "PLAYER_FELL_TO_THE_VOID": "{GRAY}{player} {GRAY}fell to the void.",
   "PLAYER_WAS_KNOCKED_INTO_THE_VOID": "{player} {GRAY}was knocked into the void by {killer}{GRAY}.",
   "PLAYER_WAS_KILLED_BY_PLAYER": "{player} {GRAY}was killed by {killer}{GRAY}.",

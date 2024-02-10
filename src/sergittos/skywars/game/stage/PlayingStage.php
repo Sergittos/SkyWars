@@ -13,14 +13,33 @@ namespace sergittos\skywars\game\stage;
 
 
 use pocketmine\player\GameMode;
+use sergittos\skywars\game\event\Event;
+use sergittos\skywars\game\event\RefillEvent;
 use sergittos\skywars\session\scoreboard\layout\GameLayout;
 use sergittos\skywars\session\Session;
 use sergittos\skywars\utils\message\MessageContainer;
 
 class PlayingStage extends Stage {
 
+    private ?Event $nextEvent = null;
+
+    public function getNextEvent(): ?Event {
+        return $this->nextEvent;
+    }
+
+    public function hasStarted(): bool {
+        return $this->nextEvent !== null;
+    }
+
+    public function startNextEvent(?Event $event = null): void {
+        $this->nextEvent = $event ?? $this->nextEvent->getNextEvent();
+        $this->nextEvent?->start($this->game);
+    }
+
     protected function onStart(): void {
         $this->game->broadcastMessage(new MessageContainer("CAGES_OPENED"));
+
+        $this->startNextEvent(new RefillEvent());
     }
 
     public function onJoin(Session $session): void {
@@ -32,8 +51,15 @@ class PlayingStage extends Stage {
     }
 
     public function tick(): void {
+        if($this->nextEvent->hasEnded()) {
+            $this->startNextEvent();
+        }
+
         foreach($this->game->getOpenedChests() as $chest) {
-            $chest->attemptToRefill($this->game);
+            $chest->updateFloatingText($this->game);
+        }
+        foreach($this->game->getPlayers() as $player) {
+            $player->updateScoreboard();
         }
     }
 
