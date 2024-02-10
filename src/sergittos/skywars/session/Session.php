@@ -26,14 +26,17 @@ use sergittos\skywars\game\kit\KitRegistry;
 use sergittos\skywars\game\stage\EndingStage;
 use sergittos\skywars\game\team\Team;
 use sergittos\skywars\item\SkywarsItemRegistry;
-use sergittos\skywars\session\scoreboard\LobbyScoreboard;
+use sergittos\skywars\session\scoreboard\layout\Layout;
+use sergittos\skywars\session\scoreboard\layout\LobbyLayout;
 use sergittos\skywars\session\scoreboard\Scoreboard;
 use sergittos\skywars\utils\message\MessageContainer;
 
 class Session {
 
     private Player $player;
+
     private Scoreboard $scoreboard;
+    private Statistics $statistics;
 
     private ?Game $game = null;
     private ?Team $team = null;
@@ -52,6 +55,9 @@ class Session {
 
     public function __construct(Player $player) {
         $this->player = $player;
+        $this->scoreboard = new Scoreboard($this);
+
+        $this->statistics = new Statistics(); // TODO: Get this from the database
         $this->selectedKit = KitRegistry::DEFAULT(); // TODO: Get this from the database
         $this->selectedCage = CageRegistry::DEFAULT(); // TODO: Get this from the database
     }
@@ -70,6 +76,10 @@ class Session {
             return $this->team->getColor() . $username;
         }
         return $username;
+    }
+
+    public function getStatistics(): Statistics {
+        return $this->statistics;
     }
 
     public function getGame(): ?Game {
@@ -130,8 +140,8 @@ class Session {
         return $this->hasGame() and $this->game->isSpectator($this);
     }
 
-    public function setScoreboard(Scoreboard $scoreboard): void {
-        $this->scoreboard = $scoreboard;
+    public function setScoreboardLayout(Layout $layout): void {
+        $this->scoreboard->setLayout($layout);
     }
 
     public function setGame(?Game $game): void {
@@ -182,7 +192,7 @@ class Session {
     }
 
     public function updateScoreboard(): void {
-        $this->scoreboard->show();
+        $this->scoreboard->update();
     }
 
     public function updateCompassDirection(): void {
@@ -235,7 +245,7 @@ class Session {
 
         $this->clearInventories();
         $this->setTrackingSession(null);
-        $this->setScoreboard(new LobbyScoreboard($this));
+        $this->setScoreboardLayout(new LobbyLayout());
     }
 
     public function kill(int $cause): void {

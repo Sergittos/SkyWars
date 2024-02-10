@@ -29,6 +29,50 @@
   "PLAYER_WAS_KILLED_BY_PLAYER": "{player} {GRAY}was killed by {killer}{GRAY}.",
   "PLAYERS_REMAINING": "{YELLOW}There are {RED}{count} {YELLOW}players remaining!",
 
-  "SCOREBOARD_TITLE": "{YELLOW}{BOLD}SKYWARS",
-  "SCOREBOARD_IP": "{YELLOW}play.server.net"
+  "LOBBY_SCOREBOARD": [
+    " {GRAY}{date}",
+    "    ",
+    " {WHITE}Solo Kills: {GREEN}{solo_kills}",
+    " {WHITE}Solo Wins: {GREEN}{solo_wins}",
+    " {WHITE}Doubles Kills: {GREEN}{doubles_kills}",
+    " {WHITE}Doubles Wins: {GREEN}{doubles_wins}",
+    "     ",
+    " {WHITE}Coins: {GOLD}{coins}",
+    " {WHITE}Souls: {AQUA}{souls}{GRAY}/100",
+    " {WHITE}Tokens: {DARK_GREEN}{tokens}",
+    "      ",
+    " {YELLOW}play.server.net"
+  ],
+  "WAITING_SCOREBOARD":[
+    " {GRAY}{date}",
+    "    ",
+    " {WHITE}Players: {GREEN}{players_count}/{slots}",
+    "     ",
+    " {stage}",
+    "      ",
+    " {WHITE}Map: {GREEN}{map}",
+    " {WHITE}Mode: {GREEN}{mode}",
+    "       ",
+    " {YELLOW}play.server.net"
+  ],
+  "GAME_SCOREBOARD": [
+    " {GRAY}{date}",
+    "    ",
+    " {WHITE}Next Event:",
+    " {GREEN}{event} {time}",
+    "     ",
+    " {WHITE}Players left: {GREEN}{players_count}",
+    "      ",
+    " {WHITE}Kills: {GREEN}{kills}",
+    "       ",
+    " {WHITE}Map: {GREEN}{map}",
+    " {WHITE}Mode: {GREEN}{mode}",
+    "        ",
+    " {YELLOW}play.server.net"
+  ],
+
+  "WAITING_STAGE": "{WHITE}Waiting...",
+  "STARTING_STAGE": "{WHITE}Starting in {GREEN}{time}s",
+
+  "SCOREBOARD_TITLE": "{YELLOW}{BOLD}SKYWARS"
 }

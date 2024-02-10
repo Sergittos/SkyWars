@@ -16,46 +16,56 @@ use pocketmine\network\mcpe\protocol\RemoveObjectivePacket;
 use pocketmine\network\mcpe\protocol\SetDisplayObjectivePacket;
 use pocketmine\network\mcpe\protocol\SetScorePacket;
 use pocketmine\network\mcpe\protocol\types\ScorePacketEntry;
+use sergittos\skywars\session\scoreboard\layout\Layout;
 use sergittos\skywars\session\Session;
 use sergittos\skywars\utils\ColorUtils;
 use sergittos\skywars\utils\message\MessageContainer;
+use function count;
 
-abstract class Scoreboard {
+class Scoreboard {
 
-    protected Session $session;
-
-    protected string $title;
-    protected string $ip;
+    private Session $session;
+    private Layout $layout;
 
     public function __construct(Session $session) {
         $this->session = $session;
-        $this->title = (new MessageContainer("SCOREBOARD_TITLE"))->getMessage();
-        $this->ip = (new MessageContainer("SCOREBOARD_IP"))->getMessage();
-
-        $this->show();
     }
 
-    public function show(): void {
-        if($this->session->isConnected()) {
-            $this->hide();
+    public function setLayout(Layout $layout): void {
+        $this->layout = $layout;
+        $this->update();
+    }
 
-            $packet = new SetDisplayObjectivePacket();
-            $packet->displaySlot = SetDisplayObjectivePacket::DISPLAY_SLOT_SIDEBAR;
-            $packet->objectiveName = $this->session->getUsername();
-            $packet->displayName = $this->title;
-            $packet->criteriaName = "dummy";
-            $packet->sortOrder = SetDisplayObjectivePacket::SORT_ORDER_DESCENDING;
-            $this->session->sendDataPacket($packet);
+    public function update(): void {
+        $this->hide();
+        $this->display();
+        $this->displayMessages();
+    }
 
-            foreach($this->getLines() as $score => $line) {
-                $this->addLine($score, " " . $line);
-            }
-            $this->addLine(2, "  ");
-            $this->addLine(1, " " . $this->ip);
+    private function hide(): void {
+        $packet = new RemoveObjectivePacket();
+        $packet->objectiveName = $this->session->getUsername();
+        $this->session->sendDataPacket($packet);
+    }
+
+    private function display(): void {
+        $packet = new SetDisplayObjectivePacket();
+        $packet->displaySlot = SetDisplayObjectivePacket::DISPLAY_SLOT_SIDEBAR;
+        $packet->objectiveName = $this->session->getUsername();
+        $packet->displayName = (new MessageContainer("SCOREBOARD_TITLE"))->getMessage();
+        $packet->criteriaName = "dummy";
+        $packet->sortOrder = SetDisplayObjectivePacket::SORT_ORDER_DESCENDING;
+        $this->session->sendDataPacket($packet);
+    }
+
+    private function displayMessages(): void {
+        $messages = $this->layout->getMessageContainer($this->session)->getMessage();
+        foreach($messages as $index => $message) {
+            $this->setLine(count($messages) - $index, $message);
         }
     }
 
-    private function addLine(int $score, string $text): void {
+    private function setLine(int $score, string $text): void {
         $entry = new ScorePacketEntry();
         $entry->objectiveName = $this->session->getUsername();
         $entry->type = ScorePacketEntry::TYPE_FAKE_PLAYER;
@@ -67,18 +77,5 @@ abstract class Scoreboard {
         $packet->entries[] = $entry;
         $this->session->sendDataPacket($packet);
     }
-
-    private function hide(): void {
-        if($this->session->isConnected()) {
-            $packet = new RemoveObjectivePacket();
-            $packet->objectiveName = $this->session->getUsername();
-            $this->session->sendDataPacket($packet);
-        }
-    }
-
-    /**
-     * @return string[]
-     */
-    abstract protected function getLines(): array;
 
 }

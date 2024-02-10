@@ -7,7 +7,7 @@ namespace sergittos\skywars\game\stage\trait;
 use pocketmine\player\GameMode;
 use pocketmine\world\Position;
 use sergittos\skywars\game\Game;
-use sergittos\skywars\session\scoreboard\WaitingScoreboard;
+use sergittos\skywars\session\scoreboard\layout\WaitingLayout;
 use sergittos\skywars\session\Session;
 use sergittos\skywars\utils\message\MessageContainer;
 
@@ -19,7 +19,7 @@ trait JoinableTrait {
 
     public function onJoin(Session $session): void {
         $session->setGame($this->game);
-        $session->setScoreboard(new WaitingScoreboard($session));
+        $session->setScoreboardLayout(new WaitingLayout());
         $session->assignTeam();
         $session->getSelectedCage()->build($position = Position::fromObject($session->getTeam()->getSpawnPoint(), $this->game->getWorld()));
         $session->giveWaitingItems();

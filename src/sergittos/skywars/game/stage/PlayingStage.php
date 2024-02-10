@@ -13,7 +13,7 @@ namespace sergittos\skywars\game\stage;
 
 
 use pocketmine\player\GameMode;
-use sergittos\skywars\session\scoreboard\GameScoreboard;
+use sergittos\skywars\session\scoreboard\layout\GameLayout;
 use sergittos\skywars\session\Session;
 use sergittos\skywars\utils\message\MessageContainer;
 
@@ -24,7 +24,7 @@ class PlayingStage extends Stage {
     }
 
     public function onJoin(Session $session): void {
-        $session->setScoreboard(new GameScoreboard($session));
+        $session->setScoreboardLayout(new GameLayout());
         $session->getSelectedKit()->apply($session);
         $session->getSelectedCage()->destroy($this->game->getWorld());
 
