@@ -33,7 +33,6 @@ use sergittos\skywars\item\spectator\TeleporterItem;
  */
 class SkywarsItemRegistry {
     use CloningRegistryTrait {
-        preprocessMember as _preprocessMember;
         _registryFromString as fromString;
     }
 
@@ -48,8 +47,8 @@ class SkywarsItemRegistry {
         self::register("teleporter", new TeleporterItem());
     }
 
-    static public function fromName(string $name): object {
-        return self::fromString($name);
+    static public function fromId(string $id): object {
+        return self::fromString($id);
     }
 
     static public function _registryFromString(string $name): Item {

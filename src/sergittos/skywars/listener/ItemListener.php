@@ -23,20 +23,20 @@ class ItemListener implements Listener {
 
     public function onTransaction(InventoryTransactionEvent $event): void {
         foreach($event->getTransaction()->getActions() as $action) {
-            if($this->getSkywarsTag($action->getSourceItem()) !== null) {
+            if($this->getSkywarsTagId($action->getSourceItem()) !== null) {
                 $event->cancel();
             }
         }
     }
 
     public function onUse(PlayerItemUseEvent $event): void {
-        $tag = $this->getSkywarsTag($event->getItem());
-        if($tag !== null) {
-            SkywarsItemRegistry::fromName($tag)->onInteract(SessionFactory::getSession($event->getPlayer()));
+        $id = $this->getSkywarsTagId($event->getItem());
+        if($id !== null) {
+            SkywarsItemRegistry::fromId($id)->onInteract(SessionFactory::getSession($event->getPlayer()));
         }
     }
 
-    private function getSkywarsTag(Item $item): ?string {
+    private function getSkywarsTagId(Item $item): ?string {
         return $item->getNamedTag()->getTag("skywars")?->getValue();
     }
 
