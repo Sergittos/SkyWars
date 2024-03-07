@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace sergittos\skywars\listener;
 
 
+use pocketmine\block\BlockTypeIds;
 use pocketmine\block\Chest as ChestBlock;
 use pocketmine\block\tile\Chest as ChestTile;
 use pocketmine\event\block\BlockBreakEvent;
@@ -21,10 +22,12 @@ use pocketmine\event\inventory\InventoryOpenEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerItemUseEvent;
 use pocketmine\item\Item;
+use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
 use sergittos\skywars\game\chest\ChestInventory;
 use sergittos\skywars\session\SessionFactory;
 use function array_filter;
+use function in_array;
 
 class GameListener implements Listener {
 
@@ -50,6 +53,7 @@ class GameListener implements Listener {
 
         $block = $event->getBlock();
         if(!$block instanceof ChestBlock) {
+            $this->dropMeltedOre($event);
             return;
         }
 
@@ -108,6 +112,13 @@ class GameListener implements Listener {
     public function onItemUse(PlayerItemUseEvent $event): void {
         if(SessionFactory::getSession($event->getPlayer())->isSpectator()) {
             $event->uncancel();
+        }
+    }
+
+    private function dropMeltedOre(BlockBreakEvent $event): void {
+        $block = $event->getBlock();
+        if(in_array($block->getTypeId(), [BlockTypeIds::COAL_ORE, BlockTypeIds::COPPER_ORE, BlockTypeIds::DIAMOND_ORE, BlockTypeIds::EMERALD_ORE, BlockTypeIds::GOLD_ORE, BlockTypeIds::IRON_ORE, BlockTypeIds::LAPIS_LAZULI_ORE, BlockTypeIds::REDSTONE_ORE,])) {
+            $event->setDrops([$block->getDropsForCompatibleTool(VanillaItems::AIR())]);
         }
     }
 
