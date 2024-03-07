@@ -20,8 +20,4 @@ class ConfigGetter {
         return SkyWars::getInstance()->getConfig()->get($key);
     }
 
-    static public function getChestRefillDelay(): int {
-        return self::get("chest-refill-delay");
-    }
-
 }

@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace sergittos\skywars;
 
 
+use muqsit\invmenu\InvMenuHandler;
 use pocketmine\block\tile\TileFactory;
 use pocketmine\event\Listener;
 use pocketmine\plugin\PluginBase;
@@ -37,6 +38,10 @@ class SkyWars extends PluginBase {
     }
 
     protected function onEnable(): void {
+        if(!InvMenuHandler::isRegistered()) {
+            InvMenuHandler::register($this);
+        }
+
         $this->getServer()->getWorldManager()->loadWorld("sw"); // just for testing
 
         TileFactory::getInstance()->register(ChestTile::class, ["Chest", "minecraft:chest"]);

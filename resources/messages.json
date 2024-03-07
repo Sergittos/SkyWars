@@ -6,6 +6,16 @@
   "SPECTATOR_SETTINGS": "{AQUA}{BOLD}Spectator Settings {RESET}{GRAY}(Right Click)",
   "PLAY_AGAIN": "{AQUA}{BOLD}Play Again {RESET}{GRAY}(Right Click)",
 
+  "CHALLENGE_ACTIVATED": "{GREEN}You have activated the {challenge} Challenge!",
+  "CHALLENGE_DEACTIVATED": "{RED}You have deactivated the {challenge} Challenge!",
+  "CANNOT_DEAL_MELEE_DAMAGE": "{RED}You cannot deal melee damage while doing the Archer Challenge.",
+  "CANNOT_USE_BLOCKS": "{RED}You cannot use blocks while doing the No Block Challenge!",
+  "CANNOT_OPEN_CHESTS": "{RED}You cannot open chests while doing the No Chest Challenge!",
+  "CANNOT_BREAK_CHESTS": "{RED}You cannot break chests while doing the No Chest Challenge!",
+  "CANNOT_WEAR_ARMOR": "{RED}You cannot wear armor while doing the Ultimate Warrior Challenge!",
+  "CANNOT_DEAL_PROJECTILE_DAMAGE": "{RED}You cannot deal projectile damage while doing the Ultimate Warrior Challenge.",
+  "CAN_ONLY_USE_STONE_SWORD": "{RED}You can only use Stone Swords while doing the Ultimate Warrior Challenge.",
+
   "PLAYER_JOINED": "{GRAY}{player} {YELLOW}has joined ({AQUA}{count}{YELLOW}/{AQUA}{slots}{YELLOW})!",
   "PLAYER_QUIT": "{GRAY}{player} {YELLOW}has quit!",
   "SELECTED_KIT": "{YELLOW}Selected Kit: {GREEN}{kit}",

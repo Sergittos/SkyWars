@@ -4,9 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a2e452ba6af6ffd4d62886462cc8dd72",
-    "packages": [],
-    "packages-dev": [
+    "content-hash": "be254b7dac3062763afe7d45f91db712",
+    "packages": [
         {
             "name": "adhocore/json-comment",
             "version": "1.2.1",
@@ -122,6 +121,52 @@
             "time": "2023-01-15T23:15:59+00:00"
         },
         {
+            "name": "muqsit/invmenu",
+            "version": "4.6.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Muqsit/InvMenu.git",
+                "reference": "706e307d705ef8fe20653bebd04a18b1d9b3e47a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Muqsit/InvMenu/zipball/706e307d705ef8fe20653bebd04a18b1d9b3e47a",
+                "reference": "706e307d705ef8fe20653bebd04a18b1d9b3e47a",
+                "shasum": ""
+            },
+            "require": {
+                "pocketmine/pocketmine-mp": "^5.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "virion": {
+                    "spec": "3.0",
+                    "namespace-root": "muqsit\\invmenu"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Muqsit",
+                    "email": "hackhack05@gmail.com"
+                }
+            ],
+            "description": "A PocketMine-MP virion to create and manage virtual inventories!",
+            "support": {
+                "issues": "https://github.com/Muqsit/InvMenu/issues",
+                "source": "https://github.com/Muqsit/InvMenu/tree/4.6.5"
+            },
+            "time": "2023-08-14T07:10:02+00:00"
+        },
+        {
             "name": "pocketmine/bedrock-block-upgrade-schema",
             "version": "3.5.0",
             "source": {
@@ -201,16 +246,16 @@
         },
         {
             "name": "pocketmine/bedrock-protocol",
-            "version": "28.0.0+bedrock-1.20.60",
+            "version": "28.0.1+bedrock-1.20.60",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pmmp/BedrockProtocol.git",
-                "reference": "6e73f21cdc7433f0674dfcdf4817f478aa5528e6"
+                "reference": "fdb0d1ddee498f995fbd21b9077aac3d3518877e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pmmp/BedrockProtocol/zipball/6e73f21cdc7433f0674dfcdf4817f478aa5528e6",
-                "reference": "6e73f21cdc7433f0674dfcdf4817f478aa5528e6",
+                "url": "https://api.github.com/repos/pmmp/BedrockProtocol/zipball/fdb0d1ddee498f995fbd21b9077aac3d3518877e",
+                "reference": "fdb0d1ddee498f995fbd21b9077aac3d3518877e",
                 "shasum": ""
             },
             "require": {
@@ -241,22 +286,22 @@
             "description": "An implementation of the Minecraft: Bedrock Edition protocol in PHP",
             "support": {
                 "issues": "https://github.com/pmmp/BedrockProtocol/issues",
-                "source": "https://github.com/pmmp/BedrockProtocol/tree/28.0.0+bedrock-1.20.60"
+                "source": "https://github.com/pmmp/BedrockProtocol/tree/28.0.1+bedrock-1.20.60"
             },
-            "time": "2024-02-26T16:18:34+00:00"
+            "time": "2024-03-01T21:49:48+00:00"
         },
         {
             "name": "pocketmine/binaryutils",
-            "version": "0.2.5",
+            "version": "0.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pmmp/BinaryUtils.git",
-                "reference": "2530d458df5c9c2a618390c751febd67df2f1918"
+                "reference": "ccfc1899b859d45814ea3592e20ebec4cb731c84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pmmp/BinaryUtils/zipball/2530d458df5c9c2a618390c751febd67df2f1918",
-                "reference": "2530d458df5c9c2a618390c751febd67df2f1918",
+                "url": "https://api.github.com/repos/pmmp/BinaryUtils/zipball/ccfc1899b859d45814ea3592e20ebec4cb731c84",
+                "reference": "ccfc1899b859d45814ea3592e20ebec4cb731c84",
                 "shasum": ""
             },
             "require": {
@@ -283,9 +328,9 @@
             "description": "Classes and methods for conveniently handling binary data",
             "support": {
                 "issues": "https://github.com/pmmp/BinaryUtils/issues",
-                "source": "https://github.com/pmmp/BinaryUtils/tree/0.2.5"
+                "source": "https://github.com/pmmp/BinaryUtils/tree/0.2.6"
             },
-            "time": "2024-02-28T13:20:27+00:00"
+            "time": "2024-03-04T15:04:17+00:00"
         },
         {
             "name": "pocketmine/callback-validator",
@@ -1241,6 +1286,7 @@
             "time": "2024-01-29T20:11:03+00:00"
         }
     ],
+    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],
@@ -1251,5 +1297,5 @@
     "platform-overrides": {
         "php": "8.1.0"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.2.0"
 }

@@ -46,8 +46,11 @@ class PlayingStage extends Stage {
         $session->setScoreboardLayout(new GameLayout());
         $session->getSelectedKit()->apply($session);
         $session->getSelectedCage()->destroy($this->game->getWorld());
-
         $session->getPlayer()->setGamemode(GameMode::SURVIVAL);
+
+        foreach($session->getSelectedChallenges() as $challenge) {
+            $challenge->onGameStart($session);
+        }
     }
 
     public function tick(): void {

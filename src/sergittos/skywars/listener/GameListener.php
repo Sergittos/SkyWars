@@ -12,19 +12,27 @@ declare(strict_types=1);
 namespace sergittos\skywars\listener;
 
 
+use Closure;
 use pocketmine\block\BlockTypeIds;
 use pocketmine\block\Chest as ChestBlock;
 use pocketmine\block\tile\Chest as ChestTile;
 use pocketmine\event\block\BlockBreakEvent;
+use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\entity\EntityItemPickupEvent;
+use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\inventory\InventoryOpenEvent;
+use pocketmine\event\inventory\InventoryTransactionEvent;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerItemUseEvent;
 use pocketmine\item\Item;
 use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
+use sergittos\skywars\game\challenge\Challenge;
 use sergittos\skywars\game\chest\ChestInventory;
+use sergittos\skywars\session\Session;
 use sergittos\skywars\session\SessionFactory;
 use function array_filter;
 use function in_array;
@@ -49,6 +57,10 @@ class GameListener implements Listener {
         $session = SessionFactory::getSession($event->getPlayer());
         if(!$session->isPlaying()) {
             return;
+        }
+
+        foreach($session->getSelectedChallenges() as $challenge) {
+            $challenge->onBlockBreak($session, $event->getBlock(), $event);
         }
 
         $block = $event->getBlock();
@@ -80,6 +92,10 @@ class GameListener implements Listener {
 
         if(!$damagerSession->isPlaying() or !$entitySession->isPlaying()) {
             return;
+        }
+
+        foreach($damagerSession->getSelectedChallenges() as $challenge) {
+            $challenge->onFight($damagerSession, $entitySession, $event, $event->getCause());
         }
 
         if($damagerSession->getTeam()->hasMember($entitySession)) {
@@ -115,10 +131,49 @@ class GameListener implements Listener {
         }
     }
 
+    public function onPlace(BlockPlaceEvent $event): void {
+        $this->checkChallenges($event->getPlayer(), fn(Session $session, Challenge $challenge) => $challenge->onBlockPlace($session, $event->getBlockAgainst(), $event));
+    }
+
+    public function onInteract(PlayerInteractEvent $event): void {
+        $this->checkChallenges($event->getPlayer(), fn(Session $session, Challenge $challenge) => $challenge->onInteract($session, $event->getBlock(), $event, $event->getAction()));
+    }
+
+    public function onItemPickup(EntityItemPickupEvent $event): void {
+        $entity = $event->getEntity();
+        if($entity instanceof Player) {
+            $this->checkChallenges($entity, fn(Session $session, Challenge $challenge) => $challenge->onItemPickup($session, $event->getItem(), $event));
+        }
+    }
+
+    public function onRegainHealth(EntityRegainHealthEvent $event): void {
+        $entity = $event->getEntity();
+        if($entity instanceof Player) {
+            $this->checkChallenges($entity, fn(Session $session, Challenge $challenge) => $challenge->onRegainHealth($session, $event));
+        }
+    }
+
+    public function onInventoryTransaction(InventoryTransactionEvent $event): void {
+        $transaction = $event->getTransaction();
+        $this->checkChallenges($transaction->getSource(), fn(Session $session, Challenge $challenge) => $challenge->onInventoryTransaction($session, $transaction, $event));
+    }
+
     private function dropMeltedOre(BlockBreakEvent $event): void {
         $block = $event->getBlock();
         if(in_array($block->getTypeId(), [BlockTypeIds::COAL_ORE, BlockTypeIds::COPPER_ORE, BlockTypeIds::DIAMOND_ORE, BlockTypeIds::EMERALD_ORE, BlockTypeIds::GOLD_ORE, BlockTypeIds::IRON_ORE, BlockTypeIds::LAPIS_LAZULI_ORE, BlockTypeIds::REDSTONE_ORE,])) {
             $event->setDrops([$block->getDropsForCompatibleTool(VanillaItems::AIR())]);
+        }
+    }
+
+    /**
+     * @param (Closure(Session, Challenge): void) $closure
+     */
+    private function checkChallenges(Player $player, Closure $closure): void {
+        $session = SessionFactory::getSession($player);
+        if($session->isPlaying()) {
+            foreach($session->getSelectedChallenges() as $challenge) {
+                $closure($session, $challenge);
+            }
         }
     }
 

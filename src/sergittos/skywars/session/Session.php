@@ -20,6 +20,7 @@ use pocketmine\Server;
 use pocketmine\world\sound\Sound;
 use sergittos\skywars\game\cage\Cage;
 use sergittos\skywars\game\cage\CageRegistry;
+use sergittos\skywars\game\challenge\Challenge;
 use sergittos\skywars\game\Game;
 use sergittos\skywars\game\kit\Kit;
 use sergittos\skywars\game\kit\KitRegistry;
@@ -30,6 +31,8 @@ use sergittos\skywars\session\scoreboard\layout\Layout;
 use sergittos\skywars\session\scoreboard\layout\LobbyLayout;
 use sergittos\skywars\session\scoreboard\Scoreboard;
 use sergittos\skywars\utils\message\MessageContainer;
+use function strcmp;
+use function usort;
 
 class Session {
 
@@ -46,6 +49,9 @@ class Session {
 
     private Kit $selectedKit;
     private Cage $selectedCage;
+
+    /** @var Challenge[] */
+    private array $selectedChallenges = [];
 
     /** @var SessionKit[] */
     private array $kits = [];
@@ -107,6 +113,16 @@ class Session {
     }
 
     /**
+     * @return Challenge[]
+     */
+    public function getSelectedChallenges(): array {
+        usort($this->selectedChallenges, function(Challenge $a, Challenge $b) {
+            return strcmp($a->getName(), $b->getName());
+        });
+        return $this->selectedChallenges;
+    }
+
+    /**
      * @return SessionKit[]
      */
     public function getKits(): array {
@@ -126,6 +142,15 @@ class Session {
 
     public function hasTeam(): bool {
         return $this->team !== null;
+    }
+
+    public function hasSelectedChallenge(Challenge $challenge): bool {
+        foreach($this->selectedChallenges as $selectedChallenge) {
+            if($selectedChallenge->getName() === $challenge->getName()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function isConnected(): bool {
@@ -170,6 +195,13 @@ class Session {
     }
 
     /**
+     * @param Challenge[] $selectedChallenges
+     */
+    public function setSelectedChallenges(array $selectedChallenges): void {
+        $this->selectedChallenges = $selectedChallenges;
+    }
+
+    /**
      * @param SessionKit[] $kits
      */
     public function setKits(array $kits): void {
@@ -181,6 +213,16 @@ class Session {
      */
     public function setCages(array $cages): void {
         $this->cages = $cages;
+    }
+
+    public function addSelectedChallenge(Challenge $challenge): void {
+        $this->selectedChallenges[] = $challenge;
+    }
+
+    public function removeSelectedChallenge(Challenge $challenge): void {
+        $this->selectedChallenges = array_filter($this->selectedChallenges, function(Challenge $selectedChallenge) use ($challenge): bool {
+            return $selectedChallenge->getName() !== $challenge->getName();
+        });
     }
 
     public function addKit(SessionKit $kit): void {
@@ -244,6 +286,7 @@ class Session {
         $this->player->teleport(Server::getInstance()->getWorldManager()->getDefaultWorld()->getSafeSpawn());
 
         $this->clearInventories();
+        $this->setSelectedChallenges([]);
         $this->setTrackingSession(null);
         $this->setScoreboardLayout(new LobbyLayout());
     }
