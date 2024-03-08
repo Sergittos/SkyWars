@@ -32,9 +32,9 @@ class GameChest { // I should clean this class
         $this->inventory = $inventory;
         $this->floatingTextParticle = new FloatingTextParticle("");
         $this->isEmptyFloatingTextParticle = new FloatingTextParticle(TextFormat::RED . "Empty!");
-        $this->updateFloatingText($game);
 
         InventoryUtils::fillChest($inventory);
+        $this->updateFloatingText($game);
     }
 
     public function refill(Game $game): void {
