@@ -1,3 +1,7 @@
+<p align="center">
+	<a href="https://discord.gg/RHw85ZfSsb"><img src="https://img.shields.io/discord/1104339932148924436?color=%2392e5fc&label=discord" alt="Discord" /></a>
+</p>
+
 # SkyWars
 🏹 SkyWars for PocketMine-MP
 
