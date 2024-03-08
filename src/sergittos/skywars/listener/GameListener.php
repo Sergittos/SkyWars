@@ -159,10 +159,17 @@ class GameListener implements Listener {
     }
 
     private function dropMeltedOre(BlockBreakEvent $event): void {
-        $block = $event->getBlock();
-        if(in_array($block->getTypeId(), [BlockTypeIds::COAL_ORE, BlockTypeIds::COPPER_ORE, BlockTypeIds::DIAMOND_ORE, BlockTypeIds::EMERALD_ORE, BlockTypeIds::GOLD_ORE, BlockTypeIds::IRON_ORE, BlockTypeIds::LAPIS_LAZULI_ORE, BlockTypeIds::REDSTONE_ORE,])) {
-            $event->setDrops([$block->getDropsForCompatibleTool(VanillaItems::AIR())]);
-        }
+        $event->setDrops(match($event->getBlock()->getTypeId()) {
+            BlockTypeIds::COAL_ORE => [VanillaItems::COAL()],
+            BlockTypeIds::COPPER_ORE => [VanillaItems::COPPER_INGOT()],
+            BlockTypeIds::DIAMOND_ORE => [VanillaItems::DIAMOND()],
+            BlockTypeIds::EMERALD_ORE => [VanillaItems::EMERALD()],
+            BlockTypeIds::GOLD_ORE => [VanillaItems::GOLD_INGOT()],
+            BlockTypeIds::IRON_ORE => [VanillaItems::IRON_INGOT()],
+            BlockTypeIds::LAPIS_LAZULI_ORE => [VanillaItems::LAPIS_LAZULI()],
+            BlockTypeIds::REDSTONE_ORE => [VanillaItems::REDSTONE_DUST()],
+            default => $event->getDrops()
+        });
     }
 
     /**
