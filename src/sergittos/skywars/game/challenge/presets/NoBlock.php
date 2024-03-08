@@ -47,7 +47,8 @@ class NoBlock extends Challenge {
 
     public function onInventoryTransaction(Session $session, InventoryTransaction $transaction, Cancellable $event): void {
         foreach($transaction->getActions() as $action) {
-            if($action->getSourceItem() instanceof ItemBlock) {
+            $item = $action->getSourceItem();
+            if($item instanceof ItemBlock and !$item->isNull()) {
                 $event->cancel();
 
                 $session->sendMessage(new MessageContainer("CANNOT_USE_BLOCKS"));
