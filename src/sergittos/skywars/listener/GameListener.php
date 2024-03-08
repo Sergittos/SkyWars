@@ -126,8 +126,11 @@ class GameListener implements Listener {
      * @handleCancelled
      */
     public function onItemUse(PlayerItemUseEvent $event): void {
-        if(SessionFactory::getSession($event->getPlayer())->isSpectator()) {
+        $player = $event->getPlayer();
+        if(SessionFactory::getSession($player)->isSpectator()) {
             $event->uncancel();
+        } else {
+            $this->checkChallenges($player, fn(Session $session, Challenge $challenge) => $challenge->onItemUse($session, $event->getItem(), $event));
         }
     }
 

@@ -50,6 +50,8 @@ abstract class Challenge {
 
     public function onInteract(Session $session, Block $block, Cancellable $event, int $action): void {}
 
+    public function onItemUse(Session $session, Item $item, Cancellable $event): void {}
+
     public function onBlockPlace(Session $session, Block $block, Cancellable $event): void {}
 
     public function onBlockBreak(Session $session, Block $block, Cancellable $event): void {}

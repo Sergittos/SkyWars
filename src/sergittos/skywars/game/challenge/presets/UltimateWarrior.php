@@ -14,6 +14,7 @@ namespace sergittos\skywars\game\challenge\presets;
 
 use pocketmine\event\Cancellable;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\inventory\ArmorInventory;
 use pocketmine\inventory\transaction\InventoryTransaction;
 use pocketmine\item\Armor;
 use pocketmine\item\Item;
@@ -49,9 +50,24 @@ class UltimateWarrior extends Challenge {
         }
     }
 
+    public function onItemUse(Session $session, Item $item, Cancellable $event): void {
+        if($item instanceof Armor) {
+            $event->cancel();
+
+            $session->sendMessage(new MessageContainer("CANNOT_WEAR_ARMOR"));
+        }
+    }
+
     public function onInventoryTransaction(Session $session, InventoryTransaction $transaction, Cancellable $event): void {
-        foreach($transaction->getActions() as $action) {
-            if($action->getSourceItem() instanceof Armor) {
+        foreach($transaction->getInventories() as $inventory) {
+            if(!$inventory instanceof ArmorInventory) {
+                continue;
+            }
+
+            foreach($transaction->getActions() as $action) {
+                if(!$action->getSourceItem() instanceof Armor) {
+                    continue;
+                }
                 $event->cancel();
 
                 $session->sendMessage(new MessageContainer("CANNOT_WEAR_ARMOR"));
