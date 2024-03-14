@@ -32,10 +32,10 @@ use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
 use sergittos\skywars\game\challenge\Challenge;
 use sergittos\skywars\game\chest\ChestInventory;
+use sergittos\skywars\game\stage\PlayingStage;
 use sergittos\skywars\session\Session;
 use sergittos\skywars\session\SessionFactory;
 use function array_filter;
-use function in_array;
 
 class GameListener implements Listener {
 
@@ -113,6 +113,12 @@ class GameListener implements Listener {
 
         $session = SessionFactory::getSession($entity);
         if(!$session->isPlaying()) {
+            return;
+        }
+
+        $stage = $session->getGame()->getStage();
+        if($stage instanceof PlayingStage and !$stage->isGraceTimeOver()) {
+            $event->cancel();
             return;
         }
 

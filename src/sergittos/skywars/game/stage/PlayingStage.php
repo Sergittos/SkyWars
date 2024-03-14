@@ -21,14 +21,20 @@ use sergittos\skywars\utils\message\MessageContainer;
 
 class PlayingStage extends Stage {
 
-    private ?Event $nextEvent = null;
+    private int $graceTime = 3;
 
-    public function getNextEvent(): ?Event {
-        return $this->nextEvent;
-    }
+    private ?Event $nextEvent = null;
 
     public function hasStarted(): bool {
         return $this->nextEvent !== null;
+    }
+
+    public function isGraceTimeOver(): bool {
+        return $this->graceTime <= 0;
+    }
+
+    public function getNextEvent(): ?Event {
+        return $this->nextEvent;
     }
 
     public function startNextEvent(?Event $event = null): void {
@@ -56,6 +62,10 @@ class PlayingStage extends Stage {
     public function tick(): void {
         if($this->nextEvent->hasEnded()) {
             $this->startNextEvent();
+        }
+
+        if(!$this->isGraceTimeOver()) {
+            $this->graceTime--;
         }
 
         foreach($this->game->getOpenedChests() as $chest) {
