@@ -17,12 +17,12 @@ use pocketmine\block\BlockTypeIds;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\event\Cancellable;
 use pocketmine\event\player\PlayerInteractEvent;
-use sergittos\skywars\game\challenge\Challenge;
+use sergittos\skywars\game\challenge\GameChallenge;
 use sergittos\skywars\session\Session;
 use sergittos\skywars\utils\ItemInfo;
 use sergittos\skywars\utils\message\MessageContainer;
 
-class NoChest extends Challenge {
+class NoChest extends GameChallenge {
 
     public function __construct() {
         parent::__construct("No Chest", "You cannot open any chests during the game", new ItemInfo(3, VanillaBlocks::CHEST()->asItem(), false));

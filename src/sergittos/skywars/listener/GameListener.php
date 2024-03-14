@@ -30,7 +30,7 @@ use pocketmine\event\player\PlayerItemUseEvent;
 use pocketmine\item\Item;
 use pocketmine\item\VanillaItems;
 use pocketmine\player\Player;
-use sergittos\skywars\game\challenge\Challenge;
+use sergittos\skywars\game\challenge\GameChallenge;
 use sergittos\skywars\game\chest\ChestInventory;
 use sergittos\skywars\game\stage\PlayingStage;
 use sergittos\skywars\session\Session;
@@ -136,35 +136,35 @@ class GameListener implements Listener {
         if(SessionFactory::getSession($player)->isSpectator()) {
             $event->uncancel();
         } else {
-            $this->checkChallenges($player, fn(Session $session, Challenge $challenge) => $challenge->onItemUse($session, $event->getItem(), $event));
+            $this->checkChallenges($player, fn(Session $session, GameChallenge $challenge) => $challenge->onItemUse($session, $event->getItem(), $event));
         }
     }
 
     public function onPlace(BlockPlaceEvent $event): void {
-        $this->checkChallenges($event->getPlayer(), fn(Session $session, Challenge $challenge) => $challenge->onBlockPlace($session, $event->getBlockAgainst(), $event));
+        $this->checkChallenges($event->getPlayer(), fn(Session $session, GameChallenge $challenge) => $challenge->onBlockPlace($session, $event->getBlockAgainst(), $event));
     }
 
     public function onInteract(PlayerInteractEvent $event): void {
-        $this->checkChallenges($event->getPlayer(), fn(Session $session, Challenge $challenge) => $challenge->onInteract($session, $event->getBlock(), $event, $event->getAction()));
+        $this->checkChallenges($event->getPlayer(), fn(Session $session, GameChallenge $challenge) => $challenge->onInteract($session, $event->getBlock(), $event, $event->getAction()));
     }
 
     public function onItemPickup(EntityItemPickupEvent $event): void {
         $entity = $event->getEntity();
         if($entity instanceof Player) {
-            $this->checkChallenges($entity, fn(Session $session, Challenge $challenge) => $challenge->onItemPickup($session, $event->getItem(), $event));
+            $this->checkChallenges($entity, fn(Session $session, GameChallenge $challenge) => $challenge->onItemPickup($session, $event->getItem(), $event));
         }
     }
 
     public function onRegainHealth(EntityRegainHealthEvent $event): void {
         $entity = $event->getEntity();
         if($entity instanceof Player) {
-            $this->checkChallenges($entity, fn(Session $session, Challenge $challenge) => $challenge->onRegainHealth($session, $event));
+            $this->checkChallenges($entity, fn(Session $session, GameChallenge $challenge) => $challenge->onRegainHealth($session, $event));
         }
     }
 
     public function onInventoryTransaction(InventoryTransactionEvent $event): void {
         $transaction = $event->getTransaction();
-        $this->checkChallenges($transaction->getSource(), fn(Session $session, Challenge $challenge) => $challenge->onInventoryTransaction($session, $transaction, $event));
+        $this->checkChallenges($transaction->getSource(), fn(Session $session, GameChallenge $challenge) => $challenge->onInventoryTransaction($session, $transaction, $event));
     }
 
     private function dropMeltedOre(BlockBreakEvent $event): void {
@@ -182,7 +182,7 @@ class GameListener implements Listener {
     }
 
     /**
-     * @param (Closure(Session, Challenge): void) $closure
+     * @param (Closure(Session, GameChallenge): void) $closure
      */
     private function checkChallenges(Player $player, Closure $closure): void {
         $session = SessionFactory::getSession($player);

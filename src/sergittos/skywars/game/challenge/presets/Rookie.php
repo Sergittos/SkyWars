@@ -13,11 +13,11 @@ namespace sergittos\skywars\game\challenge\presets;
 
 
 use pocketmine\item\VanillaItems;
-use sergittos\skywars\game\challenge\Challenge;
+use sergittos\skywars\game\challenge\GameChallenge;
 use sergittos\skywars\session\Session;
 use sergittos\skywars\utils\ItemInfo;
 
-class Rookie extends Challenge {
+class Rookie extends GameChallenge {
 
     public function __construct() {
         parent::__construct("Rookie", "You must play the game without a kit and perks", new ItemInfo(32, VanillaItems::WOODEN_PICKAXE()));

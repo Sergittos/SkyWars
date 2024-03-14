@@ -30,11 +30,11 @@ use sergittos\skywars\game\challenge\presets\UltimateWarrior;
  * @method static UHC UHC()
  * @method static UltimateWarrior ULTIMATE_WARRIOR()
  */
-class ChallengeRegistry {
+class GameChallengeRegistry {
     use CloningRegistryTrait;
 
     /**
-     * @return Challenge[]
+     * @return GameChallenge[]
      */
     static public function getAll(): array {
         return self::_registryGetAll();
@@ -51,7 +51,7 @@ class ChallengeRegistry {
     }
 
     /**
-     * @return Challenge
+     * @return GameChallenge
      */
     static public function fromName(string $name): object {
         foreach(self::getAll() as $challenge) {
@@ -62,7 +62,7 @@ class ChallengeRegistry {
         return self::_registryFromString($name);
     }
 
-    static private function register(string $name, Challenge $cage): void {
+    static private function register(string $name, GameChallenge $cage): void {
         self::_registryRegister($name, $cage);
     }
 

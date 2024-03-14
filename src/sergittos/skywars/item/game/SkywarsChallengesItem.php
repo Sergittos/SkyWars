@@ -20,8 +20,8 @@ use pocketmine\block\VanillaBlocks;
 use pocketmine\inventory\Inventory;
 use pocketmine\item\Item;
 use pocketmine\item\VanillaItems;
-use sergittos\skywars\game\challenge\Challenge;
-use sergittos\skywars\game\challenge\ChallengeRegistry;
+use sergittos\skywars\game\challenge\GameChallenge;
+use sergittos\skywars\game\challenge\GameChallengeRegistry;
 use sergittos\skywars\session\Session;
 use sergittos\skywars\session\SessionFactory;
 use sergittos\skywars\utils\ItemInfo;
@@ -42,7 +42,7 @@ class SkywarsChallengesItem extends GameItem {
             $inventory->setItem($i, VanillaBlocks::STAINED_GLASS_PANE()->setColor(DyeColor::BLACK)->asItem());
         }
 
-        foreach(ChallengeRegistry::getAll() as $challenge) {
+        foreach(GameChallengeRegistry::getAll() as $challenge) {
             $this->setChallengeItem($challenge, $session, $inventory);
         }
 
@@ -57,7 +57,7 @@ class SkywarsChallengesItem extends GameItem {
                 return;
             }
 
-            $challenge = ChallengeRegistry::fromName($name);
+            $challenge = GameChallengeRegistry::fromName($name);
 
             if(!$session->hasSelectedChallenge($challenge)) {
                 $session->addSelectedChallenge($challenge);
@@ -81,7 +81,7 @@ class SkywarsChallengesItem extends GameItem {
         return VanillaItems::BLAZE_POWDER();
     }
 
-    private function setChallengeItem(Challenge $challenge, Session $session, Inventory $inventory): void {
+    private function setChallengeItem(GameChallenge $challenge, Session $session, Inventory $inventory): void {
         $challengeItemInfo = $challenge->getItemInfo();
         $dyeItemInfo = new ItemInfo($challengeItemInfo->getSlot() + 9, VanillaItems::DYE());
 

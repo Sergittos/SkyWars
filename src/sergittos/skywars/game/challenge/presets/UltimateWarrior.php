@@ -20,12 +20,12 @@ use pocketmine\item\Armor;
 use pocketmine\item\Item;
 use pocketmine\item\ItemTypeIds;
 use pocketmine\item\VanillaItems;
-use sergittos\skywars\game\challenge\Challenge;
+use sergittos\skywars\game\challenge\GameChallenge;
 use sergittos\skywars\session\Session;
 use sergittos\skywars\utils\ItemInfo;
 use sergittos\skywars\utils\message\MessageContainer;
 
-class UltimateWarrior extends Challenge {
+class UltimateWarrior extends GameChallenge {
 
     public function __construct() {
         parent::__construct("Ultimate Warrior", "You spawn with only a Stone Sword, cannot use other swords or bows, and cannot wear armor", new ItemInfo(28, VanillaItems::STONE_SWORD()));

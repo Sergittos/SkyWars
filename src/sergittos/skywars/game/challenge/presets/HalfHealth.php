@@ -13,11 +13,11 @@ namespace sergittos\skywars\game\challenge\presets;
 
 
 use pocketmine\item\VanillaItems;
-use sergittos\skywars\game\challenge\Challenge;
+use sergittos\skywars\game\challenge\GameChallenge;
 use sergittos\skywars\session\Session;
 use sergittos\skywars\utils\ItemInfo;
 
-class HalfHealth extends Challenge {
+class HalfHealth extends GameChallenge {
 
     public function __construct() {
         parent::__construct("Half Health", "You only have 5 hearts", new ItemInfo(7, VanillaItems::GLISTERING_MELON()));

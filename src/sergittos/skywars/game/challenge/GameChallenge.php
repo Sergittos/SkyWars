@@ -19,7 +19,7 @@ use pocketmine\item\Item;
 use sergittos\skywars\session\Session;
 use sergittos\skywars\utils\ItemInfo;
 
-abstract class Challenge {
+abstract class GameChallenge {
 
     private string $name;
     private string $description;

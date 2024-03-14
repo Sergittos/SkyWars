@@ -14,11 +14,11 @@ namespace sergittos\skywars\game\challenge\presets;
 
 use pocketmine\event\Cancellable;
 use pocketmine\item\VanillaItems;
-use sergittos\skywars\game\challenge\Challenge;
+use sergittos\skywars\game\challenge\GameChallenge;
 use sergittos\skywars\session\Session;
 use sergittos\skywars\utils\ItemInfo;
 
-class UHC extends Challenge {
+class UHC extends GameChallenge {
 
     public function __construct() {
         parent::__construct("UHC", "You cannot naturally regenerate health during the game", new ItemInfo(1, VanillaItems::GOLDEN_APPLE(), false));

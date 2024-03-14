@@ -18,7 +18,7 @@ use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\enchantment\VanillaEnchantments;
 use pocketmine\item\Item;
 use pocketmine\utils\TextFormat;
-use sergittos\skywars\game\challenge\Challenge;
+use sergittos\skywars\game\challenge\GameChallenge;
 use sergittos\skywars\session\Session;
 use function array_map;
 use function strlen;
@@ -42,9 +42,9 @@ class ItemInfo {
         return $this->slot;
     }
 
-    public function getItem(Session $session, Challenge $challenge): Item {
+    public function getItem(Session $session, GameChallenge $challenge): Item {
         $item = clone $this->item;
-        $item->setCustomName(TextFormat::YELLOW . $challenge->getName() . " Challenge");
+        $item->setCustomName(TextFormat::YELLOW . $challenge->getName() . " GameChallenge");
         $item->getNamedTag()->setString("skywars_challenge", $challenge->getName());
         $item->setLore(array_map(fn(string $line) => TextFormat::GRAY . $line, $this->createLore($session, $challenge)));
 
@@ -60,7 +60,7 @@ class ItemInfo {
     /**
      * @return string[]
      */
-    private function createLore(Session $session, Challenge $challenge): array {
+    private function createLore(Session $session, GameChallenge $challenge): array {
         $lore = $this->splitTextIntoChunks($challenge->getDescription());
         $lore[] = "";
         $lore[] = "Status: " . ($session->hasSelectedChallenge($challenge) ? TextFormat::GREEN . "Active" : TextFormat::RED . "Inactive");

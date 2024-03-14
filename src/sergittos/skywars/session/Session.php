@@ -20,7 +20,7 @@ use pocketmine\Server;
 use pocketmine\world\sound\Sound;
 use sergittos\skywars\game\cage\Cage;
 use sergittos\skywars\game\cage\CageRegistry;
-use sergittos\skywars\game\challenge\Challenge;
+use sergittos\skywars\game\challenge\GameChallenge;
 use sergittos\skywars\game\Game;
 use sergittos\skywars\game\kit\Kit;
 use sergittos\skywars\game\kit\KitRegistry;
@@ -50,7 +50,7 @@ class Session {
     private Kit $selectedKit;
     private Cage $selectedCage;
 
-    /** @var Challenge[] */
+    /** @var GameChallenge[] */
     private array $selectedChallenges = [];
 
     /** @var SessionKit[] */
@@ -113,10 +113,10 @@ class Session {
     }
 
     /**
-     * @return Challenge[]
+     * @return GameChallenge[]
      */
     public function getSelectedChallenges(): array {
-        usort($this->selectedChallenges, function(Challenge $a, Challenge $b) {
+        usort($this->selectedChallenges, function(GameChallenge $a, GameChallenge $b) {
             return strcmp($a->getName(), $b->getName());
         });
         return $this->selectedChallenges;
@@ -144,7 +144,7 @@ class Session {
         return $this->team !== null;
     }
 
-    public function hasSelectedChallenge(Challenge $challenge): bool {
+    public function hasSelectedChallenge(GameChallenge $challenge): bool {
         foreach($this->selectedChallenges as $selectedChallenge) {
             if($selectedChallenge->getName() === $challenge->getName()) {
                 return true;
@@ -195,7 +195,7 @@ class Session {
     }
 
     /**
-     * @param Challenge[] $selectedChallenges
+     * @param GameChallenge[] $selectedChallenges
      */
     public function setSelectedChallenges(array $selectedChallenges): void {
         $this->selectedChallenges = $selectedChallenges;
@@ -215,12 +215,12 @@ class Session {
         $this->cages = $cages;
     }
 
-    public function addSelectedChallenge(Challenge $challenge): void {
+    public function addSelectedChallenge(GameChallenge $challenge): void {
         $this->selectedChallenges[] = $challenge;
     }
 
-    public function removeSelectedChallenge(Challenge $challenge): void {
-        $this->selectedChallenges = array_filter($this->selectedChallenges, function(Challenge $selectedChallenge) use ($challenge): bool {
+    public function removeSelectedChallenge(GameChallenge $challenge): void {
+        $this->selectedChallenges = array_filter($this->selectedChallenges, function(GameChallenge $selectedChallenge) use ($challenge): bool {
             return $selectedChallenge->getName() !== $challenge->getName();
         });
     }
