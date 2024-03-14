@@ -321,7 +321,7 @@ class Session {
         ]));
 
         $this->player->getEffects()->clear();
-        $this->player->teleport($this->game->getMap()->getSpectatorSpawnPosition());
+        $this->player->teleport($this->game->getMap()->getSpectatorSpawnPoint());
         $this->player->setGamemode(GameMode::SPECTATOR);
 
         if(!$this->game->getStage() instanceof EndingStage) {

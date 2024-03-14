@@ -24,6 +24,7 @@ use sergittos\skywars\listener\GameListener;
 use sergittos\skywars\listener\ItemListener;
 use sergittos\skywars\listener\SessionListener;
 use sergittos\skywars\utils\message\MessageManager;
+use function is_dir;
 
 class SkyWars extends PluginBase {
     use SingletonTrait;
@@ -32,8 +33,13 @@ class SkyWars extends PluginBase {
     private MessageManager $messageManager;
 
     protected function onLoad(): void {
+        $worldsDir = $this->getDataFolder() . "worlds";
+        if(!is_dir($worldsDir)) {
+            mkdir($worldsDir);
+        }
         self::setInstance($this);
 
+        $this->saveResource("maps.json", true); // TODO: Set "replace" to false on production
         $this->saveResource("messages.json", true); // TODO: Set "replace" to false on production
     }
 
@@ -41,8 +47,6 @@ class SkyWars extends PluginBase {
         if(!InvMenuHandler::isRegistered()) {
             InvMenuHandler::register($this);
         }
-
-        $this->getServer()->getWorldManager()->loadWorld("sw"); // just for testing
 
         TileFactory::getInstance()->register(ChestTile::class, ["Chest", "minecraft:chest"]);
 
@@ -54,6 +58,12 @@ class SkyWars extends PluginBase {
         $this->registerListener(new SessionListener());
 
         $this->getScheduler()->scheduleRepeatingTask(new GameHeartbeat(), 20);
+    }
+
+    protected function onDisable(): void {
+        foreach($this->gameManager->getGames() as $game) {
+            $game->unloadWorld();
+        }
     }
 
     private function registerListener(Listener $listener): void {

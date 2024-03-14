@@ -17,6 +17,7 @@ use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\event\player\PlayerQuitEvent;
+use sergittos\skywars\game\map\MapFactory;
 use sergittos\skywars\session\SessionFactory;
 use sergittos\skywars\SkyWars;
 
@@ -31,7 +32,7 @@ class SessionListener implements Listener {
     }
 
     public function onChat(PlayerChatEvent $event): void { // just for testing
-        SkyWars::getInstance()->getGameManager()->getGames()[0]->addPlayer(SessionFactory::getSession($event->getPlayer()));
+        SkyWars::getInstance()->getGameManager()->findGame(MapFactory::getRandomMap(), SessionFactory::getSession($event->getPlayer()));
     }
 
     /**

@@ -23,8 +23,10 @@ use sergittos\skywars\game\map\Map;
 use sergittos\skywars\game\stage\Stage;
 use sergittos\skywars\game\stage\StartingStage;
 use sergittos\skywars\game\stage\WaitingStage;
+use sergittos\skywars\game\task\DirectoryUnlinkTask;
 use sergittos\skywars\game\team\Team;
 use sergittos\skywars\session\Session;
+use sergittos\skywars\SkyWars;
 use sergittos\skywars\utils\message\MessageContainer;
 use function array_key_exists;
 use function array_search;
@@ -39,7 +41,7 @@ class Game {
     private Stage $stage;
     private Difficulty $difficulty = Difficulty::NORMAL;
 
-    private ?World $world = null;
+    private World $world;
 
     /** @var Team[] */
     private array $teams;
@@ -58,6 +60,7 @@ class Game {
         $this->id = $id;
         $this->teams = Utils::cloneObjectArray($map->getTeams());
 
+        $this->setupWorld();
         $this->setStage(new WaitingStage());
     }
 
@@ -77,8 +80,7 @@ class Game {
         return $this->difficulty;
     }
 
-    public function getWorld(): ?World {
-        return Server::getInstance()->getWorldManager()->getWorldByName("sw"); // just for testing
+    public function getWorld(): World {
         return $this->world;
     }
 
@@ -222,11 +224,11 @@ class Game {
     }
 
     public function unloadWorld(): void {
-        if($this->world !== null) {
-            Server::getInstance()->getWorldManager()->unloadWorld($this->world);
-
-            $this->world = null;
-        }
+        $server = Server::getInstance();
+        $server->getWorldManager()->unloadWorld($this->world);
+        $server->getAsyncPool()->submitTask(new DirectoryUnlinkTask([$this->map->createWorldPath($this->id)], function() {
+            SkyWars::getInstance()->getGameManager()->removeGame($this->id);
+        }));
     }
 
     public function setupWorld(): void {
@@ -238,7 +240,6 @@ class Game {
         }
 
         $this->world = $world_manager->getWorldByName($name);
-        $this->world->setAutoSave(false);
         $this->world->setTime(World::TIME_DAY);
         $this->world->stopTime();
     }

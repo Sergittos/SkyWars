@@ -12,34 +12,25 @@ declare(strict_types=1);
 namespace sergittos\skywars\game;
 
 
-use pocketmine\math\Vector3;
+use pocketmine\Server;
 use sergittos\skywars\game\map\Map;
-use sergittos\skywars\game\map\Mode;
-use sergittos\skywars\game\team\Team;
+use sergittos\skywars\game\map\MapFactory;
+use sergittos\skywars\game\task\DirectoryCopyTask;
+use sergittos\skywars\session\Session;
 
 class GameManager {
 
-    private int $next_game_id = 0;
+    private int $nextGameId = 0;
 
     /** @var Game[] */
     private array $games = [];
 
-    public function __construct() { // just for testing
-        $this->addGame(new Game(new Map(
-            "map1",
-            "Tree",
-            Vector3::zero(),
-            Mode::SOLOS,
-            2,
-            [
-                new Team("red", new Vector3(203, 15, 228), 1),
-                new Team("blue", new Vector3(224, 15, 228), 1),
-            ]
-        ), $this->getNextGameId()));
+    public function __construct() {
+        MapFactory::init(); // maybe this should be called in the main class
     }
 
     public function getNextGameId(): int {
-        return $this->next_game_id++;
+        return $this->nextGameId++;
     }
 
     /**
@@ -62,8 +53,24 @@ class GameManager {
         return $games;
     }
 
-    public function generateGame(Map $map): void {
+    public function findGame(Map $map, ?Session $session = null): void {
+        $games = $this->getAvailableGames($map);
+        if(count($games) === 0) {
+            $this->generateGame($map, $session);
+        } else {
+            $games[0]->addPlayer($session);
+        }
+    }
 
+    private function generateGame(Map $map, ?Session $session = null): void {
+        $id = $this->getNextGameId();
+
+        Server::getInstance()->getAsyncPool()->submitTask(new DirectoryCopyTask($map->getWorldPath(), $map->createWorldPath($id), function() use ($map, $session, $id): void {
+            $this->addGame($game = new Game($map, $id));
+            if($session !== null) {
+                $game->addPlayer($session);
+            }
+        }));
     }
 
     public function addGame(Game $game): void {

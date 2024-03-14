@@ -16,24 +16,19 @@ use pocketmine\math\Vector3;
 
 trait MapProperties {
 
-    protected string $id;
     protected string $name;
 
-    protected Vector3 $spectatorSpawnPosition;
+    protected Vector3 $spectatorSpawnPoint;
     protected Mode $mode;
 
     protected int $slots;
-
-    public function getId(): string {
-        return $this->id;
-    }
 
     public function getName(): string {
         return $this->name;
     }
 
-    public function getSpectatorSpawnPosition(): Vector3 {
-        return $this->spectatorSpawnPosition;
+    public function getSpectatorSpawnPoint(): Vector3 {
+        return $this->spectatorSpawnPoint;
     }
 
     public function getMode(): Mode {

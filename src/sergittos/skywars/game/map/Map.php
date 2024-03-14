@@ -13,8 +13,10 @@ namespace sergittos\skywars\game\map;
 
 
 use pocketmine\math\Vector3;
-use pocketmine\world\World;
+use pocketmine\Server;
 use sergittos\skywars\game\team\Team;
+use sergittos\skywars\SkyWars;
+use Symfony\Component\Filesystem\Path;
 
 class Map {
     use MapProperties;
@@ -25,10 +27,9 @@ class Map {
     /**
      * @param Team[] $teams
      */
-    public function __construct(string $id, string $name, Vector3 $spectatorSpawnPosition, Mode $mode, int $slots, array $teams) {
-        $this->id = $id;
+    public function __construct(string $name, Vector3 $spectatorSpawnPosition, Mode $mode, int $slots, array $teams) {
         $this->name = $name;
-        $this->spectatorSpawnPosition = $spectatorSpawnPosition;
+        $this->spectatorSpawnPoint = $spectatorSpawnPosition;
         $this->mode = $mode;
         $this->slots = $slots;
         $this->teams = $teams;
@@ -39,6 +40,14 @@ class Map {
      */
     public function getTeams(): array {
         return $this->teams;
+    }
+
+    public function getWorldPath(): string {
+        return Path::join(SkyWars::getInstance()->getDataFolder(), "worlds", $this->name);
+    }
+
+    public function createWorldPath(int $id): string {
+        return Path::join(Server::getInstance()->getDataPath(), "worlds", $this->name . "-" . $id);
     }
 
 }

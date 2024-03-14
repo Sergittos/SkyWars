@@ -1,0 +1,19 @@
+[
+  {
+    "name": "test",
+    "spectatorSpawnPoint": {"x": 0, "y": 0, "z": 0},
+    "mode": 1,
+    "slots": 12,
+
+    "teams": [
+      {
+        "name": "red",
+        "spawnPoint": {"x": 203, "y": 15, "z": 228}
+      },
+      {
+        "name": "blue",
+        "spawnPoint": {"x": 224, "y": 15, "z": 228}
+      }
+    ]
+  }
+]
