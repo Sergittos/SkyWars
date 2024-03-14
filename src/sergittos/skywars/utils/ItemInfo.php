@@ -44,7 +44,7 @@ class ItemInfo {
 
     public function getItem(Session $session, GameChallenge $challenge): Item {
         $item = clone $this->item;
-        $item->setCustomName(TextFormat::YELLOW . $challenge->getName() . " GameChallenge");
+        $item->setCustomName(TextFormat::YELLOW . $challenge->getName() . " Challenge");
         $item->getNamedTag()->setString("skywars_challenge", $challenge->getName());
         $item->setLore(array_map(fn(string $line) => TextFormat::GRAY . $line, $this->createLore($session, $challenge)));
 
