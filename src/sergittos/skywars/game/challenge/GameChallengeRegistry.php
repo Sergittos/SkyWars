@@ -62,8 +62,8 @@ class GameChallengeRegistry {
         return self::_registryFromString($name);
     }
 
-    static private function register(string $name, GameChallenge $cage): void {
-        self::_registryRegister($name, $cage);
+    static private function register(string $name, GameChallenge $challenge): void {
+        self::_registryRegister($name, $challenge);
     }
 
 }
