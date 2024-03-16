@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace sergittos\skywars\session;
 
 
+use sergittos\skywars\achievement\Achievement;
 use sergittos\skywars\game\map\Mode;
 
 class Statistics {
@@ -19,12 +20,16 @@ class Statistics {
     private int $coins = 0;
     private int $souls = 0;
     private int $tokens = 0;
+    private int $achievementPoints = 0;
 
     /** @var int[] */
     private array $kills = [];
 
     /** @var int[] */
     private array $wins = [];
+
+    /** @var Achievement[] */
+    private array $achievements = [];
 
     public function getCoins(): int {
         return $this->coins;
@@ -38,6 +43,10 @@ class Statistics {
         return $this->tokens;
     }
 
+    public function getAchievementPoints(): int {
+        return $this->achievementPoints;
+    }
+
     public function getKills(?Mode $mode): int {
         return $this->kills[$mode->value ?? "game"] ?? 0;
     }
@@ -46,12 +55,11 @@ class Statistics {
         return $this->wins[$mode->value] ?? 0;
     }
 
-    public function setKills(?Mode $mode, int $kills): void {
-        $this->kills[$mode->value ?? "game"] = $kills;
-    }
-
-    public function setWins(Mode $mode, int $wins): void {
-        $this->wins[$mode->value] = $wins;
+    /**
+     * @return Achievement[]
+     */
+    public function getAchievements(): array {
+        return $this->achievements;
     }
 
     public function setCoins(int $coins): void {
@@ -64,6 +72,25 @@ class Statistics {
 
     public function setTokens(int $tokens): void {
         $this->tokens = $tokens;
+    }
+
+    public function setAchievementPoints(int $achievementPoints): void {
+        $this->achievementPoints = $achievementPoints;
+    }
+
+    public function setKills(?Mode $mode, int $kills): void {
+        $this->kills[$mode->value ?? "game"] = $kills;
+    }
+
+    public function setWins(Mode $mode, int $wins): void {
+        $this->wins[$mode->value] = $wins;
+    }
+
+    /**
+     * @param Achievement[] $achievements
+     */
+    public function setAchievements(array $achievements): void {
+        $this->achievements = $achievements;
     }
 
     public function resetKills(): void {
